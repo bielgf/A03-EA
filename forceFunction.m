@@ -1,3 +1,5 @@
+% Example change number 4
+
 function fel = forceFunction(data,x,Tn,fe_bar,me_bar)
     fel = zeros(data.nne*data.ni,data.nel);
     for ei = 1:data.nel

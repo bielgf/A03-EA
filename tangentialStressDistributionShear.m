@@ -1,3 +1,5 @@
+% Example change number 3
+
 function [tau_s,s] = tangentialStressDistributionShear (x_prim,Tn,m,Tm,x_0_prim,y_0_prim,I_xx_prim,I_yy_prim,I_xy_prim,S_x_prim,S_y_prim,x_s_prim,y_s_prim,A_in,open)
 
     n_el = size(Tn,1);
