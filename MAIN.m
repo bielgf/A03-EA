@@ -1,5 +1,7 @@
 %% A03 Beam structure: Wingbox
 
+% Change example number 1
+
 % --------------------
 clear;clc
 close all
