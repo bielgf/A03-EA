@@ -1,5 +1,5 @@
 function [up,vp] = applyBC(data,p)
-    data.np = size(p,1);
+    data.np = size(p,1);                        % Example change number 6
     vp = zeros(data.np,1);
     up = zeros(data.np,1);
     for i = 1:data.np
