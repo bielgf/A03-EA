@@ -43,7 +43,7 @@ data.g = 9.81;                  % m/s^2
 data.N1 = 200;                  % Number of elements of the first section
 data.N2 = 400;                  % Number of elements of the second section
 data.N3 = 200;                  % Number of elements of the third section
-data.open = 0;
+data.open = 1;
 
 if data.open == 0
     section = 'closed';
