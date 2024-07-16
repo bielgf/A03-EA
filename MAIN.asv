@@ -225,10 +225,5 @@ StudyOfConvergence(el_conv,data,mD2,x_s_prim,pD2,section);
 
 % Unit testing
 
-% load("results.mat",'Kgood')
-% error1 = norm(K(:)-Kgood(:));
-% if error1 < 1e-10
-%     disp('Test passed')
-% else
-%     disp('Test failed')
-% end
+load("results.mat",'Kgood')
+error1 = norm(K(:)-Kgo)

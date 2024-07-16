@@ -7,8 +7,8 @@ function [u,r] = solveSystem(data,K,f,up,vp)
     
     method = 'Direct';      % method = Direct or Iterative
 
-    solver = Solver();
-    solver = solver.SolveSystem(LHS,RHS,method);
+    solver = Solver.create(LHS,RHS,method);
+    solver.compute();
 
     u(vf) = solver.solution.x;                      % free DOFs
     r = K(vp,:)*u-f(vp);                            % reaction loads

@@ -1,20 +1,16 @@
-classdef Solver
-    
-    properties
-        solution
-    end
+classdef Solver < handle
 
-    methods (Access = public)
+    methods (Access = public, Static)
         
-        function obj = SolveSystem(obj,LHS,RHS,method)
+        function obj = create(obj,LHS,RHS,method)
             
             switch method
                 case 'Direct'
-                    DS = DirectSolver();
-                    obj.solution = DS.DirectSolveSystem(LHS,RHS);
+                    obj = DirectSolver();
+                    %obj.solution = DS.DirectSolveSystem(LHS,RHS);
                 case 'Iterative'
-                    IS = IterativeSolver();
-                    obj.solution = IS.IterativeSolveSystem(LHS,RHS);
+                    obj = IterativeSolver();
+                    %obj.solution = IS.IterativeSolveSystem(LHS,RHS);
             end
         
         end
