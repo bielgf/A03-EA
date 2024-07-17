@@ -40,9 +40,9 @@ data.g = 9.81;                  % m/s^2
 %% A) Cross Section Analysis
 
 % A.0) Section's Geometric Discretization
-data.N1 = 2;                  % Number of elements of the first section
-data.N2 = 4;                  % Number of elements of the second section
-data.N3 = 2;                  % Number of elements of the third section
+data.N1 = 200;                  % Number of elements of the first section
+data.N2 = 400;                  % Number of elements of the second section
+data.N3 = 200;                  % Number of elements of the third section
 data.open = 1;
 
 if data.open == 0
@@ -115,7 +115,7 @@ grid on
 %% B) Beam Analysis
 
 % B.0) Beam's Geometric Discretization
-data.nel = 512;                     % Number of elements
+data.nel = 16;                      % Number of elements
 data.nne = 2;                       % Number of nodes in an element
 data.ni = 3;                        % Number of degrees of freedom per node
 

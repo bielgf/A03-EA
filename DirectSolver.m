@@ -1,14 +1,37 @@
-classdef DirectSolver < Solver
+classdef DirectSolver < handle
     
-    properties
+    properties (Access = private)
+        LHS
+        RHS
+    end
+
+    properties (Access = public)
         x
     end
 
     methods (Access = public)
         
-        function obj = DirectSolveSystem(obj,LHS,RHS)
-            obj.x = LHS\RHS;
+        function obj = DirectSolver(LHS,RHS)
+            obj.init(LHS,RHS);
+        end
+
+        function compute(obj)
+            obj.SolveSystem();
         end
 
     end
+
+    methods (Access = private)
+        
+        function init(obj,LHS,RHS)
+            obj.LHS = LHS;
+            obj.RHS = RHS;
+        end
+
+        function SolveSystem(obj)
+            obj.x = obj.LHS\obj.RHS;
+        end
+    
+    end
+
 end

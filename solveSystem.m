@@ -5,11 +5,11 @@ function [u,r] = solveSystem(data,K,f,up,vp)
     LHS = K(vf,vf);
     RHS = f(vf) - K(vf,vp)*u(vp);
     
-    method = 'Direct';      % method = Direct or Iterative
+    method = 'Iterative';      % method = Direct or Iterative
 
     solver = Solver.create(LHS,RHS,method);
     solver.compute();
 
-    u(vf) = solver.solution.x;                      % free DOFs
+    u(vf) = solver.x;                               % free DOFs
     r = K(vp,:)*u-f(vp);                            % reaction loads
 end

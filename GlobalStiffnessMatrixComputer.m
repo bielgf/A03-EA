@@ -1,7 +1,9 @@
 classdef GlobalStiffnessMatrixComputer < handle
 
     properties (Access = private)
-
+        Kelem
+        Tnod
+        data
     end
 
     properties (Access = public)
@@ -10,10 +12,8 @@ classdef GlobalStiffnessMatrixComputer < handle
 
     methods (Access = public)
 
-        function obj = GlobalStiffnessMatrixComputer() % passar els 4 arguments
-            obj.init(); % Inicialització
-
-            % Calculs previs (en aquest cas no cal)
+        function obj = GlobalStiffnessMatrixComputer(Kelem,Tnod,data)
+            obj.init(Kelem,Tnod,data);
         end
 
         function compute(obj)
@@ -23,21 +23,24 @@ classdef GlobalStiffnessMatrixComputer < handle
     end
 
     methods (Access = private)
-        function init(obj,...)
-                obj.Kelem = ...;
-                %...
+
+        function init(obj,Kelem,Tnod,data)
+            obj.Kelem = Kelem;
+            obj.Tnod = Tnod;
+            obj.data = data;
         end
 
-            function assemblyMatrix(obj)
-                obj.KGlobal = zeros(data.ndof,data.ndof);
-                for e = 1:data.nel
-                    for i = 1:(data.nne*data.ni)
-                        for j = 1:(data.nne*data.ni)
-                            obj.KGlobal(Td(e,i),Td(e,j)) = obj.KGlobal(Td(e,i),Td(e,j)) + Kel(i,j,e);
-                        end
+        function assemblyMatrix(obj)
+            obj.KGlobal = zeros(obj.data.ndof,obj.data.ndof);
+            for e = 1:obj.data.nel
+                for i = 1:(obj.data.nne*obj.data.ni)
+                    for j = 1:(obj.data.nne*obj.data.ni)
+                        obj.KGlobal(obj.Tnod(e,i),obj.Tnod(e,j)) = obj.KGlobal(obj.Tnod(e,i),obj.Tnod(e,j)) + obj.Kelem(i,j,e);
                     end
                 end
             end
+        end
+
     end
 
 end

@@ -8,7 +8,7 @@ function [K_global,F_global] = assemblyFunction(data,Td,Kel,fel)
         end
     end 
 
-    gsmc = GlobalStiffnessMatrixComputer(); % passar arguments
-    gsmc.compute(data,Td,Kel);
+    gsmc = GlobalStiffnessMatrixComputer(Kel,Td,data);
+    gsmc.compute();
     K_global = gsmc.KGlobal;
 end
