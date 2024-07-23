@@ -16,7 +16,7 @@ classdef DirectSolver < handle
         end
 
         function compute(obj)
-            obj.SolveSystem();
+            obj.solveSystem();
         end
 
     end
@@ -28,7 +28,7 @@ classdef DirectSolver < handle
             obj.RHS = RHS;
         end
 
-        function SolveSystem(obj)
+        function solveSystem(obj)
             obj.x = obj.LHS\obj.RHS;
         end
     

@@ -1,4 +1,4 @@
-classdef IterativeSolver < Solver
+classdef IterativeSolver < handle
     
     properties (Access = private)
         LHS
@@ -16,7 +16,7 @@ classdef IterativeSolver < Solver
         end
 
         function compute(obj)
-            obj.SolveSystem();
+            obj.solveSystem();
         end
 
     end
@@ -28,7 +28,7 @@ classdef IterativeSolver < Solver
             obj.RHS = RHS;
         end
 
-        function SolveSystem(obj)
+        function solveSystem(obj)
             obj.x = pcg(obj.LHS,obj.RHS,1e-8,10000);
         end
     

@@ -3,7 +3,7 @@ classdef GlobalStiffnessMatrixComputer < handle
     properties (Access = private)
         Kelem
         Tnod
-        data
+        data % treure
     end
 
     properties (Access = public)
@@ -12,8 +12,8 @@ classdef GlobalStiffnessMatrixComputer < handle
 
     methods (Access = public)
 
-        function obj = GlobalStiffnessMatrixComputer(Kelem,Tnod,data)
-            obj.init(Kelem,Tnod,data);
+        function obj = GlobalStiffnessMatrixComputer(cParams)
+            obj.init(cParams);
         end
 
         function compute(obj)
@@ -24,10 +24,15 @@ classdef GlobalStiffnessMatrixComputer < handle
 
     methods (Access = private)
 
-        function init(obj,Kelem,Tnod,data)
-            obj.Kelem = Kelem;
-            obj.Tnod = Tnod;
-            obj.data = data;
+        function init(obj,cParams)
+            obj.Kelem = cParams.Kel;
+            obj.Tnod = cParams.Td;
+            obj.data = cParams.data; % treure
+            % afegir:
+            % nel
+            % nne
+            % ni
+            % ndof
         end
 
         function assemblyMatrix(obj)

@@ -8,6 +8,7 @@ function [K_global,F_global] = assemblyFunction(data,Td,Kel,fel)
         end
     end 
 
+    % definir s (struct variable)
     gsmc = GlobalStiffnessMatrixComputer(Kel,Td,data);
     gsmc.compute();
     K_global = gsmc.KGlobal;
