@@ -86,26 +86,26 @@ mD1 = [ % Thickness
 [tau_t,s_tor] = tangentialStressDistributionTorsion(x_prim,Tn,mD1,Tm,M_z_prim,J,data.open,A_in);
 
 
-figure(1)
-plot(s_norm(1,:),sigma(1,:))
-xlabel('Node position, s [m]')
-ylabel('Normal stress, σ [Pa]')
-title(sprintf('Normal stress distribution on the %s section (Mx unitary)',section))
-grid on 
-
-figure(2)
-plot(s_shear(1,:),tau_s(1,:))
-xlabel('Node position, s [m]')
-ylabel('Tangetial stress, τ [Pa]')
-title(sprintf('Tangential stress distribution due to shear on the %s section (Sy unitary)',section))
-grid on 
-
-figure(3)
-plot(s_tor(1,:),tau_t(1,:))
-xlabel('Node position, s [m]')
-ylabel('Tangetial stress, τ [Pa]')
-title(sprintf('Tangential stress distribution due to torsion on the %s section (Mz unitary)',section))
-grid on
+% figure(1)
+% plot(s_norm(1,:),sigma(1,:))
+% xlabel('Node position, s [m]')
+% ylabel('Normal stress, σ [Pa]')
+% title(sprintf('Normal stress distribution on the %s section (Mx unitary)',section))
+% grid on 
+% 
+% figure(2)
+% plot(s_shear(1,:),tau_s(1,:))
+% xlabel('Node position, s [m]')
+% ylabel('Tangetial stress, τ [Pa]')
+% title(sprintf('Tangential stress distribution due to shear on the %s section (Sy unitary)',section))
+% grid on 
+% 
+% figure(3)
+% plot(s_tor(1,:),tau_t(1,:))
+% xlabel('Node position, s [m]')
+% ylabel('Tangetial stress, τ [Pa]')
+% title(sprintf('Tangential stress distribution due to torsion on the %s section (Mz unitary)',section))
+% grid on
 
 % plot2DBars(x_prim,Tn,sigma/10^(3),'kPa','Normal Stress Distribution',section)
 % plot2DBars(x_prim,Tn,tau_s/10^(3),'kPa','Tangential Stress Distribution',section)
@@ -168,47 +168,47 @@ data.ndof = data.nnod*data.ni;      % Total number of degrees of freedom
 
 % PLOTTING
 
-figure(6)
-plot(xnod,u(1:3:end-2))
-title(sprintf('Vertical Deflection for %s section',section))
-grid on
-xlabel('x (m)')
-ylabel('Vertical Deflection (m)')
-
-figure(7)
-plot(xnod,u(2:3:end-1))
-title(sprintf('Section Bending Rotation for %s section',section))
-grid on
-xlabel('x (m)')
-ylabel('Section Bending Rotation (rad)')
-
-figure(8)
-plot(xnod,u(3:3:end))
-title(sprintf('Section Torsion Rotation for %s section',section))
-grid on
-xlabel('x (m)')
-ylabel('Section Torsion Rotation (rad)')
- 
-figure(9)
-plot(xel,Sel)
-title(sprintf('Shear Force for %s section',section))
-grid on
-xlabel('x (m)')
-ylabel('Shear Force (N)')
- 
-figure(10)
-plot(xel,Mbel)
-title(sprintf('Bending Moment for %s section',section))
-grid on
-xlabel('x (m)')
-ylabel('Bending Moment (N*m)')
-
-figure(11)
-plot(xel,Mtel)
-title(sprintf('Torsion Moment for %s section',section))
-grid on
-xlabel('x (m)')
-ylabel('Torsion Moment (N*m)')
+% figure(6)
+% plot(xnod,u(1:3:end-2))
+% title(sprintf('Vertical Deflection for %s section',section))
+% grid on
+% xlabel('x (m)')
+% ylabel('Vertical Deflection (m)')
+% 
+% figure(7)
+% plot(xnod,u(2:3:end-1))
+% title(sprintf('Section Bending Rotation for %s section',section))
+% grid on
+% xlabel('x (m)')
+% ylabel('Section Bending Rotation (rad)')
+% 
+% figure(8)
+% plot(xnod,u(3:3:end))
+% title(sprintf('Section Torsion Rotation for %s section',section))
+% grid on
+% xlabel('x (m)')
+% ylabel('Section Torsion Rotation (rad)')
+%  
+% figure(9)
+% plot(xel,Sel)
+% title(sprintf('Shear Force for %s section',section))
+% grid on
+% xlabel('x (m)')
+% ylabel('Shear Force (N)')
+%  
+% figure(10)
+% plot(xel,Mbel)
+% title(sprintf('Bending Moment for %s section',section))
+% grid on
+% xlabel('x (m)')
+% ylabel('Bending Moment (N*m)')
+% 
+% figure(11)
+% plot(xel,Mtel)
+% title(sprintf('Torsion Moment for %s section',section))
+% grid on
+% xlabel('x (m)')
+% ylabel('Torsion Moment (N*m)')
 
 
 % B.2) Study of convergence
@@ -223,12 +223,55 @@ StudyOfConvergence(el_conv,data,mD2,x_s_prim,pD2,section);
 
 
 
-% Unit testing
+%% Unit testing
 
-% load("results.mat",'Kgood')
-% error1 = norm(K(:)-Kgood(:));
+% Test 1
+% load("resultsGood.mat",'KGood')
+% error1 = norm(K(:) - KGood(:));
 % if error1 < 1e-10
-%     disp('Test passed')
+%     disp('Test 1 passed')
 % else
-%     disp('Test failed')
+%     disp('Test 1 failed')
 % end
+
+test1 = stiffnessMatrixTest(K);
+run(test1)
+
+% Test 2
+% load("resultsGood.mat",'FGood')
+% error2 = norm(F(:) - FGood(:));
+% if error2 < 1e-10
+%     disp('Test 2 passed')
+% else
+%     disp('Test 2 failed')
+% end
+
+test2 = forceTest(F);
+run(test2)
+
+% Test 3
+% load("resultsGood.mat",'uGood')
+% error3 = norm(u(:) - uGood(:));
+% if error3 < 1e-10
+%     disp('Test 3 passed')
+% else
+%     disp('Test 3 failed')
+% end
+
+test3 = displacementsTest(u);
+run(test3)
+
+% Test 4
+% load("resultsGood.mat",'rGood')
+% error4 = norm(r(:) - rGood(:))/norm(rGood(:));
+% if error4 < 1e-10
+%     disp('Test 4 passed')
+% else
+%     disp('Test 4 failed')
+% end
+
+test4 = reactionsTest(r);
+run(test4)
+
+
+% transformar MAIN en class fins abans tests -> pasar tests -> commit

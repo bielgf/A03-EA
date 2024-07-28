@@ -5,7 +5,7 @@ function [u,r] = solveSystem(data,K,f,up,vp)
     LHS = K(vf,vf);
     RHS = f(vf) - K(vf,vp)*u(vp);
     
-    method = 'Iterative';      % method = Direct or Iterative
+    method = 'Direct';      % method = Direct or Iterative
 
     solver = Solver.create(LHS,RHS,method);
     solver.compute();
