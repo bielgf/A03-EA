@@ -1,15 +1,12 @@
-function [x_prim,Tm,Tn] = GeometricDiscret(data)
-    N1 = data.N1;
-    N2 = data.N2;
-    N3 = data.N3;
+function [x_prim,Tm,Tn] = GeometricDiscret(N1,N2,N3,d,h1,h2)
 
     N = [N1 N2 N3]';
     n = [N1 N1+N2 N1+N2+N3]';
     x = [
-            0                   0
-            0                   data.h2/2
-            data.d              data.h1/2
-            data.d              0
+            0              0
+            0              h2/2
+            d              h1/2
+            d              0
         ];
     x_mid = zeros((N1+N2+N3)+1,2);
     x_prim = zeros(2*(N1+N2+N3)+1,2);

@@ -1,6 +1,6 @@
 % Change example number 2
 
-function [x_0_prim,y_0_prim,x_s_prim,y_s_prim,A_tot,I_xx_prim,I_yy_prim,I_xy_prim,J,A_in] = sectionProperties(data,x_prim,Tn,m,Tm,open)
+function [x_0_prim,y_0_prim,x_s_prim,y_s_prim,A_tot,I_xx_prim,I_yy_prim,I_xy_prim,J,A_in] = sectionProperties(x_prim,Tn,m,Tm,open)
 
     n_el = size(Tn,1);
     
@@ -34,9 +34,9 @@ function [x_0_prim,y_0_prim,x_s_prim,y_s_prim,A_tot,I_xx_prim,I_yy_prim,I_xy_pri
     y_0_prim = y_0_prim/A_tot;
     
     
-    I_xx_prim= 0;
-    I_yy_prim= 0;
-    I_xy_prim= 0;
+    I_xx_prim = 0;
+    I_yy_prim = 0;
+    I_xy_prim = 0;
     J = 0;
     A_in = 0;
     
@@ -94,7 +94,7 @@ function [x_0_prim,y_0_prim,x_s_prim,y_s_prim,A_tot,I_xx_prim,I_yy_prim,I_xy_pri
         q2 = q2 + t*le(jj)*(A2+B2);
     end
 
-    if data.open == 0
+    if open == 0
         x_s_prim = x_0_prim;
         y_s_prim = y_0_prim;
     end

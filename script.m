@@ -7,7 +7,7 @@ clear;clc
 close all
 % --------------------
 
-%% DATA
+%% DATA -------------------------------------------------------------------
 
 data.E = 210*10^(9);            % Pa
 data.G = 80*10^(9);             % Pa
@@ -37,7 +37,7 @@ data.vinf = 750*5/18;           % m/s
 data.g = 9.81;                  % m/s^2
 
 
-%% A) Cross Section Analysis
+%% A) Cross Section Analysis ----------------------------------------------
 
 % A.0) Section's Geometric Discretization
 data.N1 = 200;                  % Number of elements of the first section
@@ -51,82 +51,28 @@ else
     section = 'open';
 end
 
-m = MAIN(data);
-m.computeGeoDiscret();
-
-% -------------------------------------------------- fins aquí amb MAIN OOP
-
-[x_prim,Tm,Tn] = GeometricDiscret(data);
-
-
 % A.1) A.2) Open section
 
 % Input values for analysis
-M_x_prim = -1;
-M_y_prim = 0;
-M_z_prim = 1;
-S_x_prim = 0;
-S_y_prim = 1;
+data.M_x_prim = -1;
+data.M_y_prim = 0;
+data.M_z_prim = 1;
+data.S_x_prim = 0;
+data.S_y_prim = 1;
 
 % Material properties matrix
-mD1 = [ % Thickness
-    data.t2
-    data.t3
-    data.t1
-    ];
+data.mD1 = [ % Thickness
+            data.t2
+            data.t3
+            data.t1
+            ];
 
-
-% SOLVER ------------------------------------------------------------------
-
-% Function to get section properties
-[x_0_prim,y_0_prim,x_s_prim,y_s_prim,A_tot,I_xx_prim,I_yy_prim,I_xy_prim,J,A_in] = sectionProperties(data,x_prim,Tn,mD1,Tm,data.open);
-
-% Function to get the normal stress distribution
-[sigma,s_norm] = normalStressDistribution(x_prim,Tn,x_0_prim,y_0_prim,I_xx_prim,I_yy_prim,I_xy_prim,M_x_prim,M_y_prim);
-
-% Function to get the tangential stress distribution due to shear
-[tau_s,s_shear] = tangentialStressDistributionShear(x_prim,Tn,mD1,Tm,x_0_prim,y_0_prim,I_xx_prim,I_yy_prim,I_xy_prim,S_x_prim,S_y_prim,x_s_prim,y_s_prim,A_in,data.open);
-
-% Function to get the  tangential stress distribution due to torsion
-[tau_t,s_tor] = tangentialStressDistributionTorsion(x_prim,Tn,mD1,Tm,M_z_prim,J,data.open,A_in);
-
-
-% figure(1)
-% plot(s_norm(1,:),sigma(1,:))
-% xlabel('Node position, s [m]')
-% ylabel('Normal stress, σ [Pa]')
-% title(sprintf('Normal stress distribution on the %s section (Mx unitary)',section))
-% grid on 
-% 
-% figure(2)
-% plot(s_shear(1,:),tau_s(1,:))
-% xlabel('Node position, s [m]')
-% ylabel('Tangetial stress, τ [Pa]')
-% title(sprintf('Tangential stress distribution due to shear on the %s section (Sy unitary)',section))
-% grid on 
-% 
-% figure(3)
-% plot(s_tor(1,:),tau_t(1,:))
-% xlabel('Node position, s [m]')
-% ylabel('Tangetial stress, τ [Pa]')
-% title(sprintf('Tangential stress distribution due to torsion on the %s section (Mz unitary)',section))
-% grid on
-
-% plot2DBars(x_prim,Tn,sigma/10^(3),'kPa','Normal Stress Distribution',section)
-% plot2DBars(x_prim,Tn,tau_s/10^(3),'kPa','Tangential Stress Distribution',section)
-% plot2DBars(x_prim,Tn,tau_t/10^(3),'kPa','Torsional Stress Distribution',section)
-
-
-%% B) Beam Analysis
+%% B) Beam Analysis -------------------------------------------------------
 
 % B.0) Beam's Geometric Discretization
 data.nel = 16;                      % Number of elements
 data.nne = 2;                       % Number of nodes in an element
 data.ni = 3;                        % Number of degrees of freedom per node
-
-
-% Element's force and moment computation
-[xnod,fe,me] = GetForceMomentElement(data,x_s_prim);
 
 
 % B.1)
@@ -159,19 +105,50 @@ FD2 = [
 data.nnod = size(xnod,2);
 data.ndof = data.nnod*data.ni;      % Total number of degrees of freedom
 
+%% OOP --------------------------------------------------------------------
 
-% SOLVER ------------------------------------------------------------------
+m = MAIN(data);
+m.computeGeoDiscret();
 
-[Kel] = stiffnessFunction(data,xnod',TnD2,mD2,TmD2);
-[fel] = forceFunction(data,xnod',TnD2,fe,me);
-[K,F] = assemblyFunction(data,TdD2,Kel,fel);
-[up,vp] = applyBC(data,pD2);
-[F] = pointLoads(data,F,FD2);
-[u,r] = solveSystem(data,K,F,up,vp);
-[xel,Sel,Mbel,Mtel] = internalforcesFunction(data,xnod',TnD2,TdD2,Kel,u);
+% SECTION SOLVER ----------------------------------------------------------
+
+m.computeSectionSolver();
+
+% BEAM SOLVER -------------------------------------------------------------
+
+% Element's force and moment computation
+[xnod,fe,me] = GetForceMomentElement(data,x_s_prim);
+
+m.computeBeamSolver();
+
+%% PLOTTING ---------------------------------------------------------------
+
+figure(1)
+plot(m.s_norm(1,:),m.sigma(1,:))
+xlabel('Node position, s [m]')
+ylabel('Normal stress, σ [Pa]')
+title(sprintf('Normal stress distribution on the %s section (Mx unitary)',section))
+grid on 
+
+figure(2)
+plot(m.s_shear(1,:),m.tau_s(1,:))
+xlabel('Node position, s [m]')
+ylabel('Tangetial stress, τ [Pa]')
+title(sprintf('Tangential stress distribution due to shear on the %s section (Sy unitary)',section))
+grid on 
+
+figure(3)
+plot(m.s_tor(1,:),m.tau_t(1,:))
+xlabel('Node position, s [m]')
+ylabel('Tangetial stress, τ [Pa]')
+title(sprintf('Tangential stress distribution due to torsion on the %s section (Mz unitary)',section))
+grid on
 
 
-% PLOTTING
+% plot2DBars(x_prim,Tn,sigma/10^(3),'kPa','Normal Stress Distribution',section)
+% plot2DBars(x_prim,Tn,tau_s/10^(3),'kPa','Tangential Stress Distribution',section)
+% plot2DBars(x_prim,Tn,tau_t/10^(3),'kPa','Torsional Stress Distribution',section)
+
 
 % figure(6)
 % plot(xnod,u(1:3:end-2))
@@ -277,6 +254,3 @@ run(test3)
 
 test4 = reactionsTest(r);
 run(test4)
-
-
-% transformar MAIN en class fins abans tests -> pasar tests -> commit
