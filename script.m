@@ -111,7 +111,7 @@ data.pD2 = pD2;
 
 %% OOP --------------------------------------------------------------------
 
-m = MAIN(data);
+m = FEMBeamComputer(data);
 m.computeGeoDiscret();
 
 % SECTION SOLVER ----------------------------------------------------------

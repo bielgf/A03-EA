@@ -1,4 +1,4 @@
-classdef MAIN < handle
+classdef FEMBeamComputer < handle
     
     properties (Access = private)
         d
@@ -64,7 +64,7 @@ classdef MAIN < handle
 
     methods (Access = public)
         
-        function obj = MAIN(cParams)
+        function obj = FEMBeamComputer(cParams)
             obj.init(cParams);
         end
 
