@@ -31,7 +31,6 @@ classdef FEMBeamComputer < handle
         E
         G
         xnod
-        nnod
         ni
         ndof
         data
@@ -73,7 +72,27 @@ classdef FEMBeamComputer < handle
         end
         
         function computeSectionSolver(obj)
-            obj.sectionSolver();
+            s.x_prim = obj.x_prim;
+            s.Tn     = obj.Tn;
+            s.mD1    = obj.mD1;
+            s.Tm     = obj.Tm;
+            s.open   = obj.open;
+            s.E      = obj.E;
+            s.G      = obj.G;
+            s.ni     = obj.ni;
+            s.M_x_prim = obj.M_x_prim;
+            s.M_y_prim = obj.M_y_prim;
+            s.M_z_prim = obj.M_z_prim;
+            s.S_x_prim = obj.S_x_prim;
+            s.S_y_prim = obj.S_y_prim;
+            s.data   = obj.data; % delete..
+            sec      = SectionSolver(s);
+            [obj.sigma,obj.s_norm,obj.tau_s,obj.s_shear,obj.tau_t,obj.s_tor] = sec.compute();
+            obj.xnod = sec.xnod;
+            obj.mD2  = sec.mD2;
+            obj.fe   = sec.fe;
+            obj.me   = sec.me;
+            obj.ndof = sec.ndof;
         end
 
         function computeBeamSolver(obj)
@@ -115,36 +134,6 @@ classdef FEMBeamComputer < handle
 
         function geometricdiscretization(obj)
             [obj.x_prim,obj.Tm,obj.Tn] = GeometricDiscret(obj.N1,obj.N2,obj.N3,obj.d,obj.h1,obj.h2);
-        end
-
-        function sectionSolver(obj)
-            % Function to get the section properties
-            [obj.x_0_prim,obj.y_0_prim,obj.x_s_prim,obj.y_s_prim,obj.A_tot,obj.I_xx_prim,obj.I_yy_prim,obj.I_xy_prim,obj.J,obj.A_in] = sectionProperties(obj.x_prim,obj.Tn,obj.mD1,obj.Tm,obj.open);
-            % Function to get the normal stress distribution
-            obj.computemD2();
-            obj.computeXnod();
-            [obj.sigma,obj.s_norm] = normalStressDistribution(obj.x_prim,obj.Tn,obj.x_0_prim,obj.y_0_prim,obj.I_xx_prim,obj.I_yy_prim,obj.I_xy_prim,obj.M_x_prim,obj.M_y_prim);
-            % Function to get the tangential stress distribution due to shear
-            [obj.tau_s,obj.s_shear] = tangentialStressDistributionShear(obj.x_prim,obj.Tn,obj.mD1,obj.Tm,obj.x_0_prim,obj.y_0_prim,obj.I_xx_prim,obj.I_yy_prim,obj.I_xy_prim,obj.S_x_prim,obj.S_y_prim,obj.x_s_prim,obj.y_s_prim,obj.A_in,obj.open);
-            % Function to get the  tangential stress distribution due to torsion
-            [obj.tau_t,obj.s_tor] = tangentialStressDistributionTorsion(obj.x_prim,obj.Tn,obj.mD1,obj.Tm,obj.M_z_prim,obj.J,obj.open,obj.A_in);
-        end
-
-        function computemD2(obj)
-            obj.mD2 = [ % Young's Modulus, Shear Modulus, Bending Inertia, Torsional Inertia 
-       obj.E   obj.G      obj.I_xx_prim       obj.J 
-       ];
-        end
-
-        function computeXnod(obj)
-            [obj.xnod,obj.fe,obj.me] = GetForceMomentElement(obj.data,obj.x_s_prim);
-            obj.nnod = size(obj.xnod,2);
-            obj.ndof = obj.nnod*obj.ni;
-
-            obj.FD2 = [
-        find(obj.xnod == obj.be)       1       -obj.Me*obj.g
-        find(obj.xnod == obj.be)       3       -obj.Me*obj.g*(((obj.d + obj.xi_p) - obj.x_s_prim) - obj.ze)
-        ];
         end
 
         function beamsolver(obj)
