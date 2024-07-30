@@ -78,17 +78,20 @@ data.ni = 3;                        % Number of degrees of freedom per node
 % B.1)
 % Nodal connectivities matrix
 TnD2 = [1:data.nel ; 2:data.nel+1]';
+data.TnD2 = TnD2;
 
 % Material connectivities matrix
 TmD2 = ones(data.nel,1);
+data.TmD2 = TmD2;
 
 % Degrees of freedom connectivities matrix
 TdD2 = connectDOF(data,TnD2);
+data.TdD2 = TdD2;
 
 % Material properties matrix
-mD2 = [ % Young's Modulus, Shear Modulus, Bending Inertia, Torsional Inertia 
-       data.E   data.G      I_xx_prim       J 
-       ];
+%mD2 = [ % Young's Modulus, Shear Modulus, Bending Inertia, Torsional Inertia 
+       %data.E   data.G      I_xx_prim       J 
+       %];
 
 % Fixed nodes matrix
 pD2 = [ % node, direction, value
@@ -96,14 +99,15 @@ pD2 = [ % node, direction, value
         1   2   0
         1   3   0
        ];
+data.pD2 = pD2;
 
-FD2 = [
-        find(xnod == data.be)       1       -data.Me*data.g
-        find(xnod == data.be)       3       -data.Me*data.g*(((data.d + data.xi_p) - x_s_prim) - data.ze)
-        ];
+% FD2 = [
+%         find(xnod == data.be)       1       -data.Me*data.g
+%         find(xnod == data.be)       3       -data.Me*data.g*(((data.d + data.xi_p) - x_s_prim) - data.ze)
+%         ];
 
-data.nnod = size(xnod,2);
-data.ndof = data.nnod*data.ni;      % Total number of degrees of freedom
+% data.nnod = size(xnod,2);
+% data.ndof = data.nnod*data.ni;      % Total number of degrees of freedom
 
 %% OOP --------------------------------------------------------------------
 
@@ -117,7 +121,7 @@ m.computeSectionSolver();
 % BEAM SOLVER -------------------------------------------------------------
 
 % Element's force and moment computation
-[xnod,fe,me] = GetForceMomentElement(data,x_s_prim);
+
 
 m.computeBeamSolver();
 
@@ -196,12 +200,12 @@ grid on
 % B.2) Study of convergence
 
 el_conv = [4 8 16 32 64 128 256 512];
-StudyOfConvergence(el_conv,data,mD2,x_s_prim,pD2,section);
+%StudyOfConvergence(el_conv,data,mD2,x_s_prim,pD2,section);
 
 
 %% C) Von Mises Criterion
 
-[max_vms,mcp_sect,mcp_beam] = VonMises(data,mD1,xnod,Sel,Mbel,Mtel);
+%[max_vms,mcp_sect,mcp_beam] = VonMises(data,mD1,xnod,Sel,Mbel,Mtel);
 
 
 
@@ -216,7 +220,7 @@ StudyOfConvergence(el_conv,data,mD2,x_s_prim,pD2,section);
 %     disp('Test 1 failed')
 % end
 
-test1 = stiffnessMatrixTest(K);
+test1 = stiffnessMatrixTest(m.K);
 run(test1)
 
 % Test 2
@@ -228,7 +232,7 @@ run(test1)
 %     disp('Test 2 failed')
 % end
 
-test2 = forceTest(F);
+test2 = forceTest(m.F);
 run(test2)
 
 % Test 3
@@ -240,7 +244,7 @@ run(test2)
 %     disp('Test 3 failed')
 % end
 
-test3 = displacementsTest(u);
+test3 = displacementsTest(m.u);
 run(test3)
 
 % Test 4
@@ -252,5 +256,5 @@ run(test3)
 %     disp('Test 4 failed')
 % end
 
-test4 = reactionsTest(r);
+test4 = reactionsTest(m.r);
 run(test4)
