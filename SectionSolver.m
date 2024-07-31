@@ -30,9 +30,9 @@ classdef SectionSolver < handle
             obj.init(cParams);
         end
 
-        function [sigma,s_norm,tau_s,s_shear,tau_t,s_tor] = compute(obj)
+        function [sigma,s_norm,tau_s,s_shear,tau_t,s_tor,x_s_prim] = compute(obj)
             % Function to get the section properties
-            [x_0_prim,y_0_prim,x_s_prim,y_s_prim,A_tot,I_xx_prim,I_yy_prim,I_xy_prim,J,A_in] = sectionProperties(obj.x_prim,obj.Tn,obj.mD1,obj.Tm,obj.open);
+            [x_0_prim,y_0_prim,x_s_prim,y_s_prim,~,I_xx_prim,I_yy_prim,I_xy_prim,J,A_in] = sectionProperties(obj.x_prim,obj.Tn,obj.mD1,obj.Tm,obj.open);
             % Function to get the normal stress distribution
             obj.computemD2(I_xx_prim,J);
             obj.computeXnod(x_s_prim);

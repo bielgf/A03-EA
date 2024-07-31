@@ -77,16 +77,13 @@ data.ni = 3;                        % Number of degrees of freedom per node
 
 % B.1)
 % Nodal connectivities matrix
-TnD2 = [1:data.nel ; 2:data.nel+1]';
-data.TnD2 = TnD2;
+data.TnD2 = [1:data.nel ; 2:data.nel+1]';
 
 % Material connectivities matrix
-TmD2 = ones(data.nel,1);
-data.TmD2 = TmD2;
+data.TmD2 = ones(data.nel,1);
 
 % Degrees of freedom connectivities matrix
-TdD2 = connectDOF(data,TnD2);
-data.TdD2 = TdD2;
+data.TdD2 = connectDOF(data,data.TnD2);
 
 % Material properties matrix
 %mD2 = [ % Young's Modulus, Shear Modulus, Bending Inertia, Torsional Inertia 
@@ -94,12 +91,11 @@ data.TdD2 = TdD2;
        %];
 
 % Fixed nodes matrix
-pD2 = [ % node, direction, value
-        1   1   0
-        1   2   0
-        1   3   0
-       ];
-data.pD2 = pD2;
+data.pD2 = [ % node, direction, value
+            1   1   0
+            1   2   0
+            1   3   0
+           ];
 
 % FD2 = [
 %         find(xnod == data.be)       1       -data.Me*data.g
@@ -121,7 +117,6 @@ m.computeSectionSolver();
 % BEAM SOLVER -------------------------------------------------------------
 
 % Element's force and moment computation
-
 
 m.computeBeamSolver();
 
@@ -199,13 +194,13 @@ grid on
 
 % B.2) Study of convergence
 
-el_conv = [4 8 16 32 64 128 256 512];
-%StudyOfConvergence(el_conv,data,mD2,x_s_prim,pD2,section);
+% el_conv = [4 8 16 32 64 128 256 512];
+% StudyOfConvergence(el_conv,data,mD2,x_s_prim,pD2,section);
 
 
 %% C) Von Mises Criterion
 
-%[max_vms,mcp_sect,mcp_beam] = VonMises(data,mD1,xnod,Sel,Mbel,Mtel);
+% [max_vms,mcp_sect,mcp_beam] = VonMises(data,mD1,xnod,Sel,Mbel,Mtel);
 
 
 

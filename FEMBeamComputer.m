@@ -87,7 +87,7 @@ classdef FEMBeamComputer < handle
             s.S_y_prim = obj.S_y_prim;
             s.data   = obj.data; % delete..
             sec      = SectionSolver(s);
-            [obj.sigma,obj.s_norm,obj.tau_s,obj.s_shear,obj.tau_t,obj.s_tor] = sec.compute();
+            [obj.sigma,obj.s_norm,obj.tau_s,obj.s_shear,obj.tau_t,obj.s_tor,obj.x_s_prim] = sec.compute();
             obj.xnod = sec.xnod;
             obj.mD2  = sec.mD2;
             obj.fe   = sec.fe;
@@ -139,7 +139,10 @@ classdef FEMBeamComputer < handle
         function beamsolver(obj)
             [Kel] = stiffnessFunction(obj.data,obj.xnod',obj.TnD2,obj.mD2,obj.TmD2);
             [fel] = forceFunction(obj.data,obj.xnod',obj.TnD2,obj.fe,obj.me);
+            
+            obj.FD2 = [find(obj.xnod == obj.be), 1, -obj.Me*obj.g; find(obj.xnod == obj.be), 3, -obj.Me*obj.g*(((obj.d + obj.xi_p) - obj.x_s_prim) - obj.ze)];
             obj.data.ndof = obj.ndof;
+            
             [obj.K,obj.F] = assemblyFunction(obj.data,obj.TdD2,Kel,fel);
             [up,vp] = applyBC(obj.data,obj.pD2);
             [obj.F] = pointLoads(obj.data,obj.F,obj.FD2);
