@@ -1,5 +1,5 @@
 function [up,vp] = applyBC(ni,p)
-    np = size(p,1);                        % Example change number 6
+    np = size(p,1);
     vp = zeros(np,1);
     up = zeros(np,1);
     for i = 1:np

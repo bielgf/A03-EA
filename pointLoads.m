@@ -5,5 +5,3 @@ function f = pointLoads(ni,f,F)
     end
 
 end
-
-% Example change number 5

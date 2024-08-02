@@ -1,12 +1,5 @@
 %% A03 Beam structure: Wingbox
 
-% Change example number 1
-
-% --------------------
-clear;clc
-close all
-% --------------------
-
 %% DATA -------------------------------------------------------------------
 
 data.E = 210*10^(9);            % Pa
@@ -103,39 +96,31 @@ m.computeSectionSolver();
 
 % BEAM SOLVER -------------------------------------------------------------
 
-% Element's force and moment computation
-
 m.computeBeamSolver();
 
 %% PLOTTING ---------------------------------------------------------------
 
-figure(1)
-plot(m.s_norm(1,:),m.sigma(1,:))
-xlabel('Node position, s [m]')
-ylabel('Normal stress, σ [Pa]')
-title(sprintf('Normal stress distribution on the %s section (Mx unitary)',section))
-grid on 
-
-figure(2)
-plot(m.s_shear(1,:),m.tau_s(1,:))
-xlabel('Node position, s [m]')
-ylabel('Tangetial stress, τ [Pa]')
-title(sprintf('Tangential stress distribution due to shear on the %s section (Sy unitary)',section))
-grid on 
-
-figure(3)
-plot(m.s_tor(1,:),m.tau_t(1,:))
-xlabel('Node position, s [m]')
-ylabel('Tangetial stress, τ [Pa]')
-title(sprintf('Tangential stress distribution due to torsion on the %s section (Mz unitary)',section))
-grid on
-
-
-% plot2DBars(x_prim,Tn,sigma/10^(3),'kPa','Normal Stress Distribution',section)
-% plot2DBars(x_prim,Tn,tau_s/10^(3),'kPa','Tangential Stress Distribution',section)
-% plot2DBars(x_prim,Tn,tau_t/10^(3),'kPa','Torsional Stress Distribution',section)
-
-
+% figure(1)
+% plot(m.s_norm(1,:),m.sigma(1,:))
+% xlabel('Node position, s [m]')
+% ylabel('Normal stress, σ [Pa]')
+% title(sprintf('Normal stress distribution on the %s section (Mx unitary)',section))
+% grid on 
+% 
+% figure(2)
+% plot(m.s_shear(1,:),m.tau_s(1,:))
+% xlabel('Node position, s [m]')
+% ylabel('Tangetial stress, τ [Pa]')
+% title(sprintf('Tangential stress distribution due to shear on the %s section (Sy unitary)',section))
+% grid on 
+% 
+% figure(3)
+% plot(m.s_tor(1,:),m.tau_t(1,:))
+% xlabel('Node position, s [m]')
+% ylabel('Tangetial stress, τ [Pa]')
+% title(sprintf('Tangential stress distribution due to torsion on the %s section (Mz unitary)',section))
+% grid on
+%
 % figure(6)
 % plot(xnod,u(1:3:end-2))
 % title(sprintf('Vertical Deflection for %s section',section))
@@ -193,50 +178,14 @@ grid on
 
 %% Unit testing
 
-% Test 1
-% load("resultsGood.mat",'KGood')
-% error1 = norm(K(:) - KGood(:));
-% if error1 < 1e-10
-%     disp('Test 1 passed')
-% else
-%     disp('Test 1 failed')
-% end
-
 test1 = stiffnessMatrixTest(m.K);
 run(test1)
-
-% Test 2
-% load("resultsGood.mat",'FGood')
-% error2 = norm(F(:) - FGood(:));
-% if error2 < 1e-10
-%     disp('Test 2 passed')
-% else
-%     disp('Test 2 failed')
-% end
 
 test2 = forceTest(m.F);
 run(test2)
 
-% Test 3
-% load("resultsGood.mat",'uGood')
-% error3 = norm(u(:) - uGood(:));
-% if error3 < 1e-10
-%     disp('Test 3 passed')
-% else
-%     disp('Test 3 failed')
-% end
-
 test3 = displacementsTest(m.u);
 run(test3)
-
-% Test 4
-% load("resultsGood.mat",'rGood')
-% error4 = norm(r(:) - rGood(:))/norm(rGood(:));
-% if error4 < 1e-10
-%     disp('Test 4 passed')
-% else
-%     disp('Test 4 failed')
-% end
 
 test4 = reactionsTest(m.r);
 run(test4)

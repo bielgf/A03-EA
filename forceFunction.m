@@ -11,5 +11,3 @@ function fel = forceFunction(nne,ni,nel,x,Tn,fe_bar,me_bar)
         fel(:,ei) = f_ast;
     end
 end
-
-% Example change number 4

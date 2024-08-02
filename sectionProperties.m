@@ -1,5 +1,3 @@
-% Change example number 2
-
 function [x_0_prim,y_0_prim,x_s_prim,y_s_prim,A_tot,I_xx_prim,I_yy_prim,I_xy_prim,J,A_in] = sectionProperties(x_prim,Tn,m,Tm,open)
 
     n_el = size(Tn,1);
