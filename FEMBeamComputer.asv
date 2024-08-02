@@ -81,21 +81,21 @@ classdef FEMBeamComputer < handle
         end
         
         function computeSectionSolver(obj)
-            s.x_prim   = obj.x_prim;
-            s.Tn       = obj.Tn;
-            s.mD1      = obj.mD1;
-            s.Tm       = obj.Tm;
-            s.open     = obj.open;
-            s.E        = obj.E;
-            s.G        = obj.G;
-            s.ni       = obj.ni;
-            s.nel      = obj.nel; 
-            s.b        = obj.b;
-            s.rhoinf   = obj.rhoinf;
-            s.vinf     = obj.vinf;
-            s.c        = obj.c;
-            s.cl       = obj.cl;
-            s.lambda   = obj.lambda;
+            s.x_prim = obj.x_prim;
+            s.Tn     = obj.Tn;
+            s.mD1    = obj.mD1;
+            s.Tm     = obj.Tm;
+            s.open   = obj.open;
+            s.E      = obj.E;
+            s.G      = obj.G;
+            s.ni     = obj.ni;
+            s.nel    = obj.nel; 
+            s.b      = obj.b;
+            s.rhoinf = obj.rhoinf;
+            s.vinf   = obj.vinf;
+            s.c      = obj.c;
+            s.cl     = obj.cl;
+            s.lambda = obj.lambda;
             s.g        = obj.g;
             s.d        = obj.d;
             s.xi_p     = obj.xi_p;
@@ -106,8 +106,13 @@ classdef FEMBeamComputer < handle
             s.M_z_prim = obj.M_z_prim;
             s.S_x_prim = obj.S_x_prim;
             s.S_y_prim = obj.S_y_prim;
-            sec        = SectionSolver(s);
-            [obj.sigma,obj.s_norm,obj.tau_s,obj.s_shear,obj.tau_t,obj.s_tor,obj.x_s_prim,obj.xnod,obj.mD2,obj.fe,obj.me,obj.ndof] = sec.compute();
+            sec      = SectionSolver(s);
+            [obj.sigma,obj.s_norm,obj.tau_s,obj.s_shear,obj.tau_t,obj.s_tor,obj.x_s_prim] = sec.compute();
+            obj.xnod = sec.xnod;
+            obj.mD2  = sec.mD2;
+            obj.fe   = sec.fe;
+            obj.me   = sec.me;
+            obj.ndof = sec.ndof;
         end
 
         function computeBeamSolver(obj)
