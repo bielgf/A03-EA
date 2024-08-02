@@ -1,6 +1,6 @@
-function Kel = stiffnessFunction(data,x,Tn,m,Tm)
-    Kel = zeros(data.nne*data.ni,data.nne*data.ni,data.nel);
-    for ei = 1:data.nel
+function Kel = stiffnessFunction(nne,ni,nel,x,Tn,m,Tm)
+    Kel = zeros(nne*ni,nne*ni,nel);
+    for ei = 1:nel
         le = abs(x(Tn(ei,2),1) - x(Tn(ei,1),1));        % Get the beam's lenght
     
         E = m(Tm(ei),1);                                % Get the beam's properties

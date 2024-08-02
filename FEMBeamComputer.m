@@ -32,8 +32,9 @@ classdef FEMBeamComputer < handle
         G
         xnod
         ni
+        nne
+        nel
         ndof
-        data
         TnD2
         TmD2
         TdD2
@@ -46,6 +47,14 @@ classdef FEMBeamComputer < handle
         g
         ze
         xi_p
+        b
+        rhoinf
+        vinf
+        c
+        cl
+        lambda
+        za
+        zm
     end
 
     properties (Access = public)
@@ -80,12 +89,23 @@ classdef FEMBeamComputer < handle
             s.E      = obj.E;
             s.G      = obj.G;
             s.ni     = obj.ni;
+            s.nel    = obj.nel; 
+            s.b      = obj.b;
+            s.rhoinf = obj.rhoinf;
+            s.vinf   = obj.vinf;
+            s.c      = obj.c;
+            s.cl     = obj.cl;
+            s.lambda = obj.lambda;
+            s.g      = obj.g;
+            s.d      = obj.d;
+            s.xi_p   = obj.xi_p;
+            s.za       = obj.za;
+            s.zm       = obj.zm;
             s.M_x_prim = obj.M_x_prim;
             s.M_y_prim = obj.M_y_prim;
             s.M_z_prim = obj.M_z_prim;
             s.S_x_prim = obj.S_x_prim;
             s.S_y_prim = obj.S_y_prim;
-            s.data   = obj.data; % delete..
             sec      = SectionSolver(s);
             [obj.sigma,obj.s_norm,obj.tau_s,obj.s_shear,obj.tau_t,obj.s_tor,obj.x_s_prim] = sec.compute();
             obj.xnod = sec.xnod;
@@ -120,7 +140,14 @@ classdef FEMBeamComputer < handle
             obj.E        = cParams.E;
             obj.G        = cParams.G;
             obj.ni       = cParams.ni;
-            obj.data     = cParams; % ELIMINAR-HO !!
+            obj.nne      = cParams.nne;
+            obj.nel      = cParams.nel;
+            obj.b      = cParams.b;
+            obj.rhoinf = cParams.rhoinf;
+            obj.vinf   = cParams.vinf;
+            obj.c      = cParams.c;
+            obj.cl     = cParams.Cl;
+            obj.lambda = cParams.lambda;
             obj.TnD2     = cParams.TnD2;
             obj.TmD2     = cParams.TmD2;
             obj.TdD2     = cParams.TdD2;
@@ -129,6 +156,8 @@ classdef FEMBeamComputer < handle
             obj.Me       = cParams.Me;
             obj.g        = cParams.g;
             obj.ze       = cParams.ze;
+            obj.za       = cParams.za;
+            obj.zm       = cParams.zm;
             obj.xi_p     = cParams.xi_p;
         end
 
@@ -137,17 +166,16 @@ classdef FEMBeamComputer < handle
         end
 
         function beamsolver(obj)
-            [Kel] = stiffnessFunction(obj.data,obj.xnod',obj.TnD2,obj.mD2,obj.TmD2);
-            [fel] = forceFunction(obj.data,obj.xnod',obj.TnD2,obj.fe,obj.me);
+            [Kel] = stiffnessFunction(obj.nne,obj.ni,obj.nel,obj.xnod',obj.TnD2,obj.mD2,obj.TmD2);
+            [fel] = forceFunction(obj.nne,obj.ni,obj.nel,obj.xnod',obj.TnD2,obj.fe,obj.me);
             
             obj.FD2 = [find(obj.xnod == obj.be), 1, -obj.Me*obj.g; find(obj.xnod == obj.be), 3, -obj.Me*obj.g*(((obj.d + obj.xi_p) - obj.x_s_prim) - obj.ze)];
-            obj.data.ndof = obj.ndof;
             
-            [obj.K,obj.F] = assemblyFunction(obj.data,obj.TdD2,Kel,fel);
-            [up,vp] = applyBC(obj.data,obj.pD2);
-            [obj.F] = pointLoads(obj.data,obj.F,obj.FD2);
-            [obj.u,obj.r] = solveSystem(obj.data,obj.K,obj.F,up,vp);
-            [xel,Sel,Mbel,Mtel] = internalforcesFunction(obj.data,obj.xnod',obj.TnD2,obj.TdD2,Kel,obj.u);
+            [obj.K,obj.F] = assemblyFunction(obj.ndof,obj.nel,obj.nne,obj.ni,obj.TdD2,Kel,fel);
+            [up,vp] = applyBC(obj.ni,obj.pD2);
+            [obj.F] = pointLoads(obj.ni,obj.F,obj.FD2);
+            [obj.u,obj.r] = solveSystem(obj.ndof,obj.K,obj.F,up,vp);
+            [xel,Sel,Mbel,Mtel] = internalforcesFunction(obj.nel,obj.ni,obj.nne,obj.xnod',obj.TnD2,obj.TdD2,Kel,obj.u);
         end
 
     end

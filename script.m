@@ -83,12 +83,7 @@ data.TnD2 = [1:data.nel ; 2:data.nel+1]';
 data.TmD2 = ones(data.nel,1);
 
 % Degrees of freedom connectivities matrix
-data.TdD2 = connectDOF(data,data.TnD2);
-
-% Material properties matrix
-%mD2 = [ % Young's Modulus, Shear Modulus, Bending Inertia, Torsional Inertia 
-       %data.E   data.G      I_xx_prim       J 
-       %];
+data.TdD2 = connectDOF(data.nel,data.ni,data.TnD2);
 
 % Fixed nodes matrix
 data.pD2 = [ % node, direction, value
@@ -96,14 +91,6 @@ data.pD2 = [ % node, direction, value
             1   2   0
             1   3   0
            ];
-
-% FD2 = [
-%         find(xnod == data.be)       1       -data.Me*data.g
-%         find(xnod == data.be)       3       -data.Me*data.g*(((data.d + data.xi_p) - x_s_prim) - data.ze)
-%         ];
-
-% data.nnod = size(xnod,2);
-% data.ndof = data.nnod*data.ni;      % Total number of degrees of freedom
 
 %% OOP --------------------------------------------------------------------
 

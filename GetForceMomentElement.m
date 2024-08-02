@@ -1,34 +1,25 @@
-function [xnod,fe,me] = GetForceMomentElement(data,xsp)
+function [xnod,fe,me] = GetForceMomentElement(nel,b,rhoinf,vinf,c,cl,lambda,g,d,xi_p,za,zm,xsp)
     
     % Geometric validation
-    if mod(data.nel,4) ~= 0
+    if mod(nel,4) ~= 0
         fprintf('Invalid number of elements for beam''s geometric discretization\n')
         fe = -1;
         me = -1;
         return
     end
     
-    % Data
-    b = data.b;
-    rhoinf = data.rhoinf;
-    vinf = data.vinf;
-    c = data.c;
-    Cl = data.Cl;
-    lambda = data.lambda;
-    g = data.g;
-    
     % Distance computing
-    zeta_s = (data.d + data.xi_p) - xsp;
+    zeta_s = (d + xi_p) - xsp;
     
-    dLift = zeta_s - data.za;
-    dWeight = zeta_s - data.zm;
+    dLift = zeta_s - za;
+    dWeight = zeta_s - zm;
 
     % Node computing
-    xnod = 0:(b/data.nel):data.b;
+    xnod = 0:(b/nel):b;
     
     % Force computing
     x = sym('x','real');
-    lx = 1/2*rhoinf*(vinf^2)*c*Cl*sqrt(1 - (x/b)^2);
+    lx = 1/2*rhoinf*(vinf^2)*c*cl*sqrt(1 - (x/b)^2);
     lx = matlabFunction(lx);
     lx = lx(xnod);
 
@@ -36,10 +27,10 @@ function [xnod,fe,me] = GetForceMomentElement(data,xsp)
 
     
     % Vector's initialization
-    fe = zeros(1,data.nel);
-    me = zeros(1,data.nel);
+    fe = zeros(1,nel);
+    me = zeros(1,nel);
     
-    for ii = 1:data.nel
+    for ii = 1:nel
         Lift_e = (lx(ii) + lx(ii+1))/2;
         W_e = (wx(ii) + wx(ii+1))/2;
 

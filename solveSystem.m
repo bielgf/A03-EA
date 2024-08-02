@@ -1,6 +1,6 @@
-function [u,r] = solveSystem(data,K,f,up,vp)
-    vf = setdiff((1:data.ndof)',vp);
-    u = zeros(data.ndof,1);
+function [u,r] = solveSystem(ndof,K,f,up,vp)
+    vf = setdiff((1:ndof)',vp);
+    u = zeros(ndof,1);
     u(vp) = up;
     LHS = K(vf,vf);
     RHS = f(vf) - K(vf,vp)*u(vp);

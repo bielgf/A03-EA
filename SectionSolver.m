@@ -9,12 +9,23 @@ classdef SectionSolver < handle
         E
         G
         ni
+        nel
+        b
+        rhoinf
+        vinf
+        c
+        cl
+        lambda
+        g
+        d
+        xi_p
+        za
+        zm
         M_x_prim
         M_y_prim
         M_z_prim
         S_x_prim
         S_y_prim
-        data % DELETE!!
     end
 
     properties (Access = public)
@@ -59,8 +70,18 @@ classdef SectionSolver < handle
             obj.M_z_prim = cParams.M_z_prim;
             obj.S_x_prim = cParams.S_x_prim;
             obj.S_y_prim = cParams.S_y_prim;
-
-            obj.data   = cParams.data; % DELETE !!
+            obj.nel      = cParams.nel;
+            obj.b        = cParams.b;
+            obj.rhoinf   = cParams.rhoinf;
+            obj.vinf     = cParams.vinf;
+            obj.c        = cParams.c;
+            obj.cl       = cParams.cl;
+            obj.lambda   = cParams.lambda;
+            obj.g        = cParams.g;
+            obj.d        = cParams.d;
+            obj.xi_p     = cParams.xi_p;
+            obj.za       = cParams.za;
+            obj.zm       = cParams.zm;
         end
 
         function computemD2(obj,I_xx_prim,J)
@@ -70,7 +91,7 @@ classdef SectionSolver < handle
         end
 
         function computeXnod(obj,x_s_prim)
-            [obj.xnod,obj.fe,obj.me] = GetForceMomentElement(obj.data,x_s_prim);
+            [obj.xnod,obj.fe,obj.me] = GetForceMomentElement(obj.nel,obj.b,obj.rhoinf,obj.vinf,obj.c,obj.cl,obj.lambda,obj.g,obj.d,obj.xi_p,obj.za,obj.zm,x_s_prim);
             nnod = size(obj.xnod,2);
             obj.ndof = nnod*obj.ni;
         end

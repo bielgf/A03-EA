@@ -1,14 +1,14 @@
-function [xel,Sel,Mbel,Mtel] = internalforcesFunction(data,x,Tn,Td,Kel,u)
+function [xel,Sel,Mbel,Mtel] = internalforcesFunction(nel,ni,nne,x,Tn,Td,Kel,u)
 
-    xel = zeros(2,data.nel);                     % Initialize vectors
-    Sel = zeros(2,data.nel);
-    Mbel = zeros(2,data.nel);
-    Mtel = zeros(2,data.nel);
+    xel = zeros(2,nel);                     % Initialize vectors
+    Sel = zeros(2,nel);
+    Mbel = zeros(2,nel);
+    Mtel = zeros(2,nel);
     
-    for e = 1:data.nel
+    for e = 1:nel
         xel(:,e) = x(Tn(e,:));                  % Element's vertices coordinates
-        uel = zeros(data.nne*data.ni,1);
-        for ii = 1:data.nne*data.ni
+        uel = zeros(nne*ni,1);
+        for ii = 1:nne*ni
             uel(ii) = u(Td(e,ii));              % Assign DOF value
         end
         fel_int = Kel(:,:,e)*uel;               % Compute internal forces
