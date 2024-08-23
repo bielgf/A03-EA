@@ -22,7 +22,7 @@ classdef GeometricDiscretizationSolver < handle
         end
 
         function [x_prim,Tm,Tn] = compute(obj)
-            [x_prim,Tm,Tn] = GeometricDiscret(obj.N1,obj.N2,obj.N3,obj.d,obj.h1,obj.h2);
+            [x_prim,Tm,Tn] = obj.geometricSolver();
         end
 
     end
@@ -36,6 +36,10 @@ classdef GeometricDiscretizationSolver < handle
             obj.d  = cParams.d;
             obj.h1 = cParams.h1;
             obj.h2 = cParams.h2;
+        end
+
+        function [x_prim,Tm,Tn] = geometricSolver(obj)
+            [x_prim,Tm,Tn] = GeometricDiscret(obj.N1,obj.N2,obj.N3,obj.d,obj.h1,obj.h2);
         end
 
     end

@@ -118,7 +118,7 @@ classdef FEMBeamComputer < handle
         end
 
         function computeBeamSolver(obj)
-            obj.beamsolver();
+            obj.beamSolver();
         end
 
     end
@@ -163,7 +163,7 @@ classdef FEMBeamComputer < handle
             obj.xi_p     = cParams.xi_p;
         end
 
-        function beamsolver(obj)
+        function beamSolver(obj)
             [Kel] = stiffnessFunction(obj.nne,obj.ni,obj.nel,obj.xnod',obj.TnD2,obj.mD2,obj.TmD2);
             [fel] = forceFunction(obj.nne,obj.ni,obj.nel,obj.xnod',obj.TnD2,obj.fe,obj.me);
             obj.computeFD2();
