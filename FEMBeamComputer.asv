@@ -146,7 +146,7 @@ classdef FEMBeamComputer < handle
     methods (Access = private)
         
         function init(obj,cParams)
-            obj.d        = cParams.beamWidth;
+            obj.beamWidth        = cParams.beamWidth;
             obj.h1       = cParams.h1;
             obj.h2       = cParams.h2;
             obj.N1       = cParams.N1;
@@ -156,31 +156,31 @@ classdef FEMBeamComputer < handle
             obj.open     = cParams.open;
             obj.M_x_prim = cParams.xBendMoment;
             obj.M_y_prim = cParams.yBendMoment;
-            obj.M_z_prim = cParams.zBendMoment;
-            obj.S_x_prim = cParams.xShearForce;
-            obj.S_y_prim = cParams.yShearForce;
+            obj.M_z_prim = cParams.;
+            obj.S_x_prim = cParams.S_x_prim;
+            obj.S_y_prim = cParams.S_y_prim;
             obj.E        = cParams.E;
             obj.G        = cParams.G;
-            obj.ni       = cParams.numDOFsNode;
-            obj.nne      = cParams.numNodesElem;
-            obj.nel      = cParams.numElements;
-            obj.b        = cParams.wingspan;
-            obj.rhoinf   = cParams.rhoInf;
-            obj.vinf     = cParams.vInf;
-            obj.c        = cParams.chord;
+            obj.ni       = cParams.ni;
+            obj.nne      = cParams.nne;
+            obj.nel      = cParams.nel;
+            obj.b        = cParams.b;
+            obj.rhoinf   = cParams.rhoinf;
+            obj.vinf     = cParams.vinf;
+            obj.c        = cParams.c;
             obj.cl       = cParams.Cl;
             obj.lambda   = cParams.lambda;
-            obj.TnD2     = cParams.nodalConnec;
-            obj.TmD2     = cParams.materialConnec;
-            obj.TdD2     = cParams.dofsConnec;
-            obj.pD2      = cParams.fixedNodes;
-            obj.be       = cParams.xEngine;
-            obj.Me       = cParams.engineMass;
+            obj.TnD2     = cParams.TnD2;
+            obj.TmD2     = cParams.TmD2;
+            obj.TdD2     = cParams.TdD2;
+            obj.pD2      = cParams.pD2;
+            obj.be       = cParams.be;
+            obj.Me       = cParams.Me;
             obj.g        = cParams.g;
-            obj.ze       = cParams.zEngine;
-            obj.za       = cParams.aeroCenter;
-            obj.zm       = cParams.centerOfMass;
-            obj.xi_p     = cParams.chiP;
+            obj.ze       = cParams.ze;
+            obj.za       = cParams.za;
+            obj.zm       = cParams.zm;
+            obj.xi_p     = cParams.xi_p;
         end
 
     end
