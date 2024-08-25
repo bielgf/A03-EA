@@ -163,19 +163,36 @@ classdef FEMBeamComputer < handle
             obj.xi_p     = cParams.xi_p;
         end
 
-        function beamSolver(obj)
-            [Kel] = stiffnessFunction(obj.nne,obj.ni,obj.nel,obj.xnod',obj.TnD2,obj.mD2,obj.TmD2);
-            [fel] = forceFunction(obj.nne,obj.ni,obj.nel,obj.xnod',obj.TnD2,obj.fe,obj.me);
-            obj.computeFD2();
-            [obj.K,obj.F] = assemblyFunction(obj.ndof,obj.nel,obj.nne,obj.ni,obj.TdD2,Kel,fel);
-            [up,vp] = applyBC(obj.ni,obj.pD2);
-            [obj.F] = pointLoads(obj.ni,obj.F,obj.FD2);
-            [obj.u,obj.r] = solveSystem(obj.ndof,obj.K,obj.F,up,vp);
-            [xel,Sel,Mbel,Mtel] = internalforcesFunction(obj.nel,obj.ni,obj.nne,obj.xnod',obj.TnD2,obj.TdD2,Kel,obj.u);
-        end
+%         function geoDiscretSolver
+%             
+%         end
+% 
+%         function secSolver
+%             
+%         end
 
-        function computeFD2(obj)
-            obj.FD2 = [find(obj.xnod == obj.be), 1, -obj.Me*obj.g; find(obj.xnod == obj.be), 3, -obj.Me*obj.g*(((obj.d + obj.xi_p) - obj.x_s_prim) - obj.ze)];
+        function beamSolver(obj)
+            bm.nne      = obj.nne;
+            bm.ni       = obj.ni;
+            bm.nel      = obj.nel;
+            bm.xnod     = obj.xnod;
+            bm.TnD2     = obj.TnD2;
+            bm.TdD2     = obj.TdD2;
+            bm.mD2      = obj.mD2;
+            bm.TmD2     = obj.TmD2;
+            bm.pD2      = obj.pD2;
+            bm.fe       = obj.fe;
+            bm.me       = obj.me;
+            bm.ndof     = obj.ndof;
+            bm.be       = obj.be;
+            bm.Me       = obj.Me;
+            bm.g        = obj.g;
+            bm.d        = obj.d;
+            bm.xi_p     = obj.xi_p;
+            bm.x_s_prim = obj.x_s_prim;
+            bm.ze       = obj.ze;
+            beam       = FEMBeamSolver(bm);
+            [obj.K,obj.F,obj.u,obj.r] = beam.compute();
         end
 
     end
