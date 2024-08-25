@@ -118,7 +118,27 @@ classdef FEMBeamComputer < handle
         end
 
         function computeBeamSolver(obj)
-            obj.beamSolver();
+            bm.nne      = obj.nne;
+            bm.ni       = obj.ni;
+            bm.nel      = obj.nel;
+            bm.xnod     = obj.xnod;
+            bm.TnD2     = obj.TnD2;
+            bm.TdD2     = obj.TdD2;
+            bm.mD2      = obj.mD2;
+            bm.TmD2     = obj.TmD2;
+            bm.pD2      = obj.pD2;
+            bm.fe       = obj.fe;
+            bm.me       = obj.me;
+            bm.ndof     = obj.ndof;
+            bm.be       = obj.be;
+            bm.Me       = obj.Me;
+            bm.g        = obj.g;
+            bm.d        = obj.d;
+            bm.xi_p     = obj.xi_p;
+            bm.x_s_prim = obj.x_s_prim;
+            bm.ze       = obj.ze;
+            beam       = FEMBeamSolver(bm);
+            [obj.K,obj.F,obj.u,obj.r] = beam.compute();
         end
 
     end
@@ -161,38 +181,6 @@ classdef FEMBeamComputer < handle
             obj.za       = cParams.za;
             obj.zm       = cParams.zm;
             obj.xi_p     = cParams.xi_p;
-        end
-
-%         function geoDiscretSolver
-%             
-%         end
-% 
-%         function secSolver
-%             
-%         end
-
-        function beamSolver(obj)
-            bm.nne      = obj.nne;
-            bm.ni       = obj.ni;
-            bm.nel      = obj.nel;
-            bm.xnod     = obj.xnod;
-            bm.TnD2     = obj.TnD2;
-            bm.TdD2     = obj.TdD2;
-            bm.mD2      = obj.mD2;
-            bm.TmD2     = obj.TmD2;
-            bm.pD2      = obj.pD2;
-            bm.fe       = obj.fe;
-            bm.me       = obj.me;
-            bm.ndof     = obj.ndof;
-            bm.be       = obj.be;
-            bm.Me       = obj.Me;
-            bm.g        = obj.g;
-            bm.d        = obj.d;
-            bm.xi_p     = obj.xi_p;
-            bm.x_s_prim = obj.x_s_prim;
-            bm.ze       = obj.ze;
-            beam       = FEMBeamSolver(bm);
-            [obj.K,obj.F,obj.u,obj.r] = beam.compute();
         end
 
     end
