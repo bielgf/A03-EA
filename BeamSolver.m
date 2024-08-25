@@ -1,4 +1,4 @@
-classdef FEMBeamSolver < handle
+classdef BeamSolver < handle
     
     properties (Access = private)
         nne
@@ -25,7 +25,7 @@ classdef FEMBeamSolver < handle
 
     methods (Access = public)
         
-        function obj = FEMBeamSolver(cParams)
+        function obj = BeamSolver(cParams)
             obj.init(cParams);
         end
 

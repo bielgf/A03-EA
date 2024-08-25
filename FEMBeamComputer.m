@@ -83,8 +83,8 @@ classdef FEMBeamComputer < handle
             gd.d  = obj.d;
             gd.h1 = obj.h1;
             gd.h2 = obj.h2;
-            geodiscret = GeometricDiscretizationSolver(gd);
-            [obj.x_prim,obj.Tm,obj.Tn] = geodiscret.compute();
+            geoDiscret = GeometricDiscretizationSolver(gd);
+            [obj.x_prim,obj.Tm,obj.Tn] = geoDiscret.compute();
         end
         
         function computeSectionSolver(obj)
@@ -137,7 +137,7 @@ classdef FEMBeamComputer < handle
             bm.xi_p     = obj.xi_p;
             bm.x_s_prim = obj.x_s_prim;
             bm.ze       = obj.ze;
-            beam       = FEMBeamSolver(bm);
+            beam        = BeamSolver(bm);
             [obj.K,obj.F,obj.u,obj.r] = beam.compute();
         end
 

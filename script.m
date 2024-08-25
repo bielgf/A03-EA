@@ -120,7 +120,7 @@ m.computeBeamSolver();
 % ylabel('Tangetial stress, τ [Pa]')
 % title(sprintf('Tangential stress distribution due to torsion on the %s section (Mz unitary)',section))
 % grid on
-%
+% 
 % figure(6)
 % plot(xnod,u(1:3:end-2))
 % title(sprintf('Vertical Deflection for %s section',section))
