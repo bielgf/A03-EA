@@ -1,6 +1,7 @@
 classdef FEMBeamComputer < handle
     
     properties (Access = private)
+        data
         d
         h1
         h2
@@ -141,11 +142,17 @@ classdef FEMBeamComputer < handle
             [obj.K,obj.F,obj.u,obj.r] = beam.compute();
         end
 
+        function computeStudyOfCnvg(obj)
+            stycnv = studyOfCnvg(obj.data);
+            stycnv.compute();
+        end
+
     end
 
     methods (Access = private)
         
         function init(obj,cParams)
+            obj.data     = cParams;
             obj.d        = cParams.beamWidth;
             obj.h1       = cParams.h1;
             obj.h2       = cParams.h2;

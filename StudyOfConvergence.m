@@ -1,5 +1,6 @@
-function StudyOfConvergence(el_conv,data,mD2,x_s_prim,pD2,section)
+function StudyOfConvergence(data,mD2,x_s_prim,pD2,section)
     
+    el_conv = [4 8 16 32 64 128 256 512];
     u_conv = zeros(3,size(el_conv,2));
     
     for nel = 1:size(el_conv,2)

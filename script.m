@@ -166,8 +166,7 @@ m.computeBeamSolver();
 
 % B.2) Study of convergence
 
-% el_conv = [4 8 16 32 64 128 256 512];
-% StudyOfConvergence(el_conv,data,mD2,x_s_prim,pD2,section);
+m.computeStudyOfCnvg();
 
 
 %% C) Von Mises Criterion
