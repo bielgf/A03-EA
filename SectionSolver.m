@@ -6,21 +6,6 @@ classdef SectionSolver < handle
         mD1
         Tm
         open
-        E
-        G
-        ni
-        nel
-        b
-        rhoinf
-        vinf
-        c
-        cl
-        lambda
-        g
-        d
-        xi_p
-        za
-        zm
         M_x_prim
         M_y_prim
         M_z_prim
@@ -49,26 +34,11 @@ classdef SectionSolver < handle
             obj.mD1      = cParams.mD1;
             obj.Tm       = cParams.Tm;
             obj.open     = cParams.open;
-            obj.E        = cParams.E;
-            obj.G        = cParams.G;
-            obj.ni       = cParams.ni;
             obj.M_x_prim = cParams.M_x_prim;
             obj.M_y_prim = cParams.M_y_prim;
             obj.M_z_prim = cParams.M_z_prim;
             obj.S_x_prim = cParams.S_x_prim;
             obj.S_y_prim = cParams.S_y_prim;
-            obj.nel      = cParams.nel;
-            obj.b        = cParams.b;
-            obj.rhoinf   = cParams.rhoinf;
-            obj.vinf     = cParams.vinf;
-            obj.c        = cParams.c;
-            obj.cl       = cParams.cl;
-            obj.lambda   = cParams.lambda;
-            obj.g        = cParams.g;
-            obj.d        = cParams.d;
-            obj.xi_p     = cParams.xi_p;
-            obj.za       = cParams.za;
-            obj.zm       = cParams.zm;
         end
 
     end
