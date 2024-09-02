@@ -33,10 +33,8 @@ classdef SectionSolver < handle
             obj.init(cParams);
         end
 
-        function [sigma,s_norm,tau_s,s_shear,tau_t,s_tor,x_s_prim,xnod,mD2,fe,me,ndof] = compute(obj)
+        function [sigma,s_norm,tau_s,s_shear,tau_t,s_tor,x_s_prim,I_xx_prim,J] = compute(obj)
             [x_0_prim,y_0_prim,x_s_prim,y_s_prim,~,I_xx_prim,I_yy_prim,I_xy_prim,J,A_in] = sectionProperties(obj.x_prim,obj.Tn,obj.mD1,obj.Tm,obj.open);
-            [mD2] = obj.computemD2(I_xx_prim,J);
-            [xnod,fe,me,ndof] = obj.computeXnod(x_s_prim);
             [sigma,s_norm] = normalStressDistribution(obj.x_prim,obj.Tn,x_0_prim,y_0_prim,I_xx_prim,I_yy_prim,I_xy_prim,obj.M_x_prim,obj.M_y_prim);
             [tau_s,s_shear] = tangentialStressDistributionShear(obj.x_prim,obj.Tn,obj.mD1,obj.Tm,x_0_prim,y_0_prim,I_xx_prim,I_yy_prim,I_xy_prim,obj.S_x_prim,obj.S_y_prim,x_s_prim,y_s_prim,A_in,obj.open);
             [tau_t,s_tor] = tangentialStressDistributionTorsion(obj.x_prim,obj.Tn,obj.mD1,obj.Tm,obj.M_z_prim,J,obj.open,A_in);
@@ -44,6 +42,7 @@ classdef SectionSolver < handle
     end
 
     methods (Access = private)
+        
         function init(obj,cParams)
             obj.x_prim   = cParams.x_prim;
             obj.Tn       = cParams.Tn;
@@ -72,16 +71,5 @@ classdef SectionSolver < handle
             obj.zm       = cParams.zm;
         end
 
-        function [mD2] = computemD2(obj,I_xx_prim,J)
-            mD2 = [ % Young's Modulus, Shear Modulus, Bending Inertia, Torsional Inertia
-                   obj.E   obj.G      I_xx_prim       J
-                   ];
-        end
-
-        function [xnod,fe,me,ndof] = computeXnod(obj,x_s_prim)
-            [xnod,fe,me] = GetForceMomentElement(obj.nel,obj.b,obj.rhoinf,obj.vinf,obj.c,obj.cl,obj.lambda,obj.g,obj.d,obj.xi_p,obj.za,obj.zm,x_s_prim);
-            nnod = size(xnod,2);
-            ndof = nnod*obj.ni;
-        end
     end
 end

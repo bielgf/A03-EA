@@ -114,31 +114,31 @@ classdef FEMBeamComputer < handle
             s.S_x_prim = obj.S_x_prim;
             s.S_y_prim = obj.S_y_prim;
             sec        = SectionSolver(s);
-            [obj.sigma,obj.s_norm,obj.tau_s,obj.s_shear,obj.tau_t,obj.s_tor,obj.x_s_prim,obj.xnod,obj.mD2,obj.fe,obj.me,obj.ndof] = sec.compute();
+            [obj.sigma,obj.s_norm,obj.tau_s,obj.s_shear,obj.tau_t,obj.s_tor,obj.x_s_prim,obj.I_xx_prim,obj.J] = sec.compute();
         end
 
-%         function [obj.mD2] = computemD2(obj)
-%             obj.mD2 = [obj.E   obj.G   obj.I_xx_prim  obj.J];
-%         end
+        function computemD2(obj)
+            obj.mD2 = [obj.E   obj.G   obj.I_xx_prim  obj.J];
+        end
 
-%         function computeForceMomentElem(obj)
-%             fm.ni       = obj.ni;
-%             fm.nel      = obj.nel;
-%             fm.b        = obj.b;
-%             fm.rhoinf   = obj.rhoinf;
-%             fm.vinf     = obj.vinf;
-%             fm.c        = obj.c;
-%             fm.cl       = obj.cl;
-%             fm.lambda   = obj.lambda;
-%             fm.g        = obj.g;
-%             fm.d        = obj.d;
-%             fm.xi_p     = obj.xi_p;
-%             fm.za       = obj.za;
-%             fm.zm       = obj.zm;
-%             fm.x_s_prim = obj.x_s_prim;
-%             forceMomentElem = ForceMomentElemCompute(fm);
-%             [obj.xnod,obj.fe,obj.me,obj.ndof] = forceMomentElem.compute();
-%         end
+        function computeForceMomentElem(obj)
+            fm.ni       = obj.ni;
+            fm.nel      = obj.nel;
+            fm.b        = obj.b;
+            fm.rhoinf   = obj.rhoinf;
+            fm.vinf     = obj.vinf;
+            fm.c        = obj.c;
+            fm.cl       = obj.cl;
+            fm.lambda   = obj.lambda;
+            fm.g        = obj.g;
+            fm.d        = obj.d;
+            fm.xi_p     = obj.xi_p;
+            fm.za       = obj.za;
+            fm.zm       = obj.zm;
+            fm.x_s_prim = obj.x_s_prim;
+            forceMomentElem = ForceMomentElemCompute(fm);
+            [obj.xnod,obj.fe,obj.me,obj.ndof] = forceMomentElem.compute();
+        end
 
         function computeBeamSolver(obj)
             bm.nne      = obj.nne;
