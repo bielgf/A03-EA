@@ -1,7 +1,6 @@
 classdef FEMBeamComputer < handle
     
     properties (Access = private)
-        data
         d
         h1
         h2
@@ -118,6 +117,29 @@ classdef FEMBeamComputer < handle
             [obj.sigma,obj.s_norm,obj.tau_s,obj.s_shear,obj.tau_t,obj.s_tor,obj.x_s_prim,obj.xnod,obj.mD2,obj.fe,obj.me,obj.ndof] = sec.compute();
         end
 
+%         function [obj.mD2] = computemD2(obj)
+%             obj.mD2 = [obj.E   obj.G   obj.I_xx_prim  obj.J];
+%         end
+
+%         function computeForceMomentElem(obj)
+%             fm.ni       = obj.ni;
+%             fm.nel      = obj.nel;
+%             fm.b        = obj.b;
+%             fm.rhoinf   = obj.rhoinf;
+%             fm.vinf     = obj.vinf;
+%             fm.c        = obj.c;
+%             fm.cl       = obj.cl;
+%             fm.lambda   = obj.lambda;
+%             fm.g        = obj.g;
+%             fm.d        = obj.d;
+%             fm.xi_p     = obj.xi_p;
+%             fm.za       = obj.za;
+%             fm.zm       = obj.zm;
+%             fm.x_s_prim = obj.x_s_prim;
+%             forceMomentElem = ForceMomentElemCompute(fm);
+%             [obj.xnod,obj.fe,obj.me,obj.ndof] = forceMomentElem.compute();
+%         end
+
         function computeBeamSolver(obj)
             bm.nne      = obj.nne;
             bm.ni       = obj.ni;
@@ -142,17 +164,11 @@ classdef FEMBeamComputer < handle
             [obj.K,obj.F,obj.u,obj.r] = beam.compute();
         end
 
-        function computeStudyOfCnvg(obj)
-            stycnv = studyOfCnvg(obj.data);
-            stycnv.compute();
-        end
-
     end
 
     methods (Access = private)
         
         function init(obj,cParams)
-            obj.data     = cParams;
             obj.d        = cParams.beamWidth;
             obj.h1       = cParams.h1;
             obj.h2       = cParams.h2;

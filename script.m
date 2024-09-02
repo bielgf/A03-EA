@@ -94,6 +94,9 @@ m.computeGeoDiscret();
 
 m.computeSectionSolver();
 
+% m.computemD2();
+% m.computeForceMomentElem();
+
 % BEAM SOLVER -------------------------------------------------------------
 
 m.computeBeamSolver();
@@ -166,7 +169,9 @@ m.computeBeamSolver();
 
 % B.2) Study of convergence
 
-m.computeStudyOfCnvg();
+stycnv = studyOfCnvg(data);
+stycnv.compute();
+
 
 
 %% C) Von Mises Criterion

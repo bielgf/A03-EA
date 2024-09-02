@@ -1,6 +1,6 @@
 classdef studyOfCnvg < handle
 
-    properties (Access = public)
+    properties (Access = private)
         data
     end
 
