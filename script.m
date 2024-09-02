@@ -169,8 +169,8 @@ m.computeBeamSolver();
 
 % B.2) Study of convergence
 
-% stycnv = studyOfCnvg(data);
-% stycnv.compute();
+stycnv = studyOfCnvg(data);
+stycnv.compute();
 
 
 

@@ -36,6 +36,8 @@ classdef studyOfCnvg < handle
                 m = FEMBeamComputer(obj.data);
                 m.computeGeoDiscret();
                 m.computeSectionSolver();
+                m.computemD2();
+                m.computeForceMomentElem();
                 m.computeBeamSolver();
                 
                 u_conv(:,nel) = m.u(end-2:end);
