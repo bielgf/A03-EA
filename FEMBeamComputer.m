@@ -13,15 +13,9 @@ classdef FEMBeamComputer < handle
         mD1
         open
         x_0_prim
-        y_0_prim
         x_s_prim
-        y_s_prim
-        A_tot
         I_xx_prim
-        I_yy_prim
-        I_xy_prim
         J
-        A_in
         M_x_prim
         M_y_prim
         M_z_prim
@@ -41,7 +35,6 @@ classdef FEMBeamComputer < handle
         fe
         me
         pD2
-        FD2
         be
         Me
         g
