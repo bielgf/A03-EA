@@ -38,7 +38,7 @@ classdef SectionSolver < handle
             obj.yBendMoment = cParams.yBendMoment;
             obj.zBendMoment = cParams.zBendMoment;
             obj.xShearForce = cParams.xShearForce;
-            obj.yShearForce = cParams.yShearForce;
+            obj.yShearForce = cParams.ShearForce;
         end
 
     end

@@ -1,7 +1,7 @@
 classdef ForceMomentElemCompute < handle
     
     properties (Access = private)
-        ni
+        numDOFsNode
         nel
         b
         rhoinf
@@ -26,7 +26,7 @@ classdef ForceMomentElemCompute < handle
         function [xnod,fe,me,ndof] = compute(obj)
             [xnod,fe,me] = GetForceMomentElement(obj.nel,obj.b,obj.rhoinf,obj.vinf,obj.c,obj.cl,obj.lambda,obj.g,obj.d,obj.xi_p,obj.za,obj.zm,obj.x_s_prim);
             nnod = size(xnod,2);
-            ndof = nnod*obj.ni;
+            ndof = nnod*obj.numDOFsNode;
         end
 
     end
@@ -34,7 +34,7 @@ classdef ForceMomentElemCompute < handle
     methods (Access = private)
 
         function init(obj,cParams)
-            obj.ni       = cParams.ni;
+            obj.numDOFsNode       = cParams.numDOFsNode;
             obj.nel      = cParams.nel;
             obj.b        = cParams.b;
             obj.rhoinf   = cParams.rhoinf;

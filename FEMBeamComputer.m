@@ -1,7 +1,7 @@
 classdef FEMBeamComputer < handle
     
     properties (Access = private)
-        d
+        beamWidth
         h1
         h2
         N1
@@ -10,23 +10,23 @@ classdef FEMBeamComputer < handle
         x_prim
         Tm
         Tn
-        mD1
+        materialProp
         open
         x_0_prim
         x_s_prim
         I_xx_prim
         J
-        M_x_prim
-        M_y_prim
-        M_z_prim
-        S_x_prim
-        S_y_prim
+        xBendMoment
+        yBendMoment
+        zBendMoment
+        xShearForce
+        yShearForce
         mD2
         E
         G
         xnod
-        ni
-        nne
+        numDOFsNode
+        numNodesElem
         nel
         ndof
         TnD2
@@ -73,7 +73,7 @@ classdef FEMBeamComputer < handle
             gd.N1 = obj.N1;
             gd.N2 = obj.N2;
             gd.N3 = obj.N3;
-            gd.d  = obj.d;
+            gd.beamWidth  = obj.beamWidth;
             gd.h1 = obj.h1;
             gd.h2 = obj.h2;
             geoDiscret = GeometricDiscretizationSolver(gd);
@@ -83,14 +83,14 @@ classdef FEMBeamComputer < handle
         function computeSectionSolver(obj)
             s.x_prim   = obj.x_prim;
             s.Tn       = obj.Tn;
-            s.mD1      = obj.mD1;
+            s.materialProp      = obj.materialProp;
             s.Tm       = obj.Tm;
             s.open     = obj.open;
-            s.M_x_prim = obj.M_x_prim;
-            s.M_y_prim = obj.M_y_prim;
-            s.M_z_prim = obj.M_z_prim;
-            s.S_x_prim = obj.S_x_prim;
-            s.S_y_prim = obj.S_y_prim;
+            s.xBendMoment = obj.xBendMoment;
+            s.yBendMoment = obj.yBendMoment;
+            s.zBendMoment = obj.zBendMoment;
+            s.xShearForce = obj.xShearForce;
+            s.yShearForce = obj.yShearForce;
             sec        = SectionSolver(s);
             [obj.sigma,obj.s_norm,obj.tau_s,obj.s_shear,obj.tau_t,obj.s_tor,obj.x_s_prim,obj.I_xx_prim,obj.J] = sec.compute();
         end
@@ -100,7 +100,7 @@ classdef FEMBeamComputer < handle
         end
 
         function computeForceMomentElem(obj)
-            fm.ni       = obj.ni;
+            fm.numDOFsNode       = obj.numDOFsNode;
             fm.nel      = obj.nel;
             fm.b        = obj.b;
             fm.rhoinf   = obj.rhoinf;
@@ -109,7 +109,7 @@ classdef FEMBeamComputer < handle
             fm.cl       = obj.cl;
             fm.lambda   = obj.lambda;
             fm.g        = obj.g;
-            fm.d        = obj.d;
+            fm.d        = obj.beamWidth;
             fm.xi_p     = obj.xi_p;
             fm.za       = obj.za;
             fm.zm       = obj.zm;
@@ -119,8 +119,8 @@ classdef FEMBeamComputer < handle
         end
 
         function computeBeamSolver(obj)
-            bm.nne      = obj.nne;
-            bm.ni       = obj.ni;
+            bm.numNodesElem      = obj.numNodesElem;
+            bm.numDOFsNode       = obj.numDOFsNode;
             bm.nel      = obj.nel;
             bm.xnod     = obj.xnod;
             bm.TnD2     = obj.TnD2;
@@ -134,7 +134,7 @@ classdef FEMBeamComputer < handle
             bm.be       = obj.be;
             bm.Me       = obj.Me;
             bm.g        = obj.g;
-            bm.d        = obj.d;
+            bm.beamWidth        = obj.beamWidth;
             bm.xi_p     = obj.xi_p;
             bm.x_s_prim = obj.x_s_prim;
             bm.ze       = obj.ze;
@@ -147,23 +147,23 @@ classdef FEMBeamComputer < handle
     methods (Access = private)
         
         function init(obj,cParams)
-            obj.d        = cParams.beamWidth;
+            obj.beamWidth        = cParams.beamWidth;
             obj.h1       = cParams.h1;
             obj.h2       = cParams.h2;
             obj.N1       = cParams.N1;
             obj.N2       = cParams.N2;
             obj.N3       = cParams.N3;
-            obj.mD1      = cParams.materialProp;
+            obj.materialProp      = cParams.materialProp;
             obj.open     = cParams.open;
-            obj.M_x_prim = cParams.xBendMoment;
-            obj.M_y_prim = cParams.yBendMoment;
-            obj.M_z_prim = cParams.zBendMoment;
-            obj.S_x_prim = cParams.xShearForce;
-            obj.S_y_prim = cParams.yShearForce;
+            obj.xBendMoment = cParams.xBendMoment;
+            obj.yBendMoment = cParams.yBendMoment;
+            obj.zBendMoment = cParams.zBendMoment;
+            obj.xShearForce = cParams.xShearForce;
+            obj.yShearForce = cParams.yShearForce;
             obj.E        = cParams.E;
             obj.G        = cParams.G;
-            obj.ni       = cParams.numDOFsNode;
-            obj.nne      = cParams.numNodesElem;
+            obj.numDOFsNode       = cParams.numDOFsNode;
+            obj.numNodesElem      = cParams.numNodesElem;
             obj.nel      = cParams.numElements;
             obj.b        = cParams.wingspan;
             obj.rhoinf   = cParams.rhoInf;

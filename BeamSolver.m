@@ -1,8 +1,8 @@
 classdef BeamSolver < handle
     
     properties (Access = private)
-        nne
-        ni
+        numNodesElem
+        numDOFsNode
         nel
         xnod
         TnD2
@@ -17,7 +17,7 @@ classdef BeamSolver < handle
         be
         Me
         g
-        d
+        beamWidth
         xi_p
         x_s_prim
         ze
@@ -30,14 +30,14 @@ classdef BeamSolver < handle
         end
 
         function [K,F,u,r] = compute(obj)
-            [Kel] = stiffnessFunction(obj.nne,obj.ni,obj.nel,obj.xnod',obj.TnD2,obj.mD2,obj.TmD2);
-            [fel] = forceFunction(obj.nne,obj.ni,obj.nel,obj.xnod',obj.TnD2,obj.fe,obj.me);
+            [Kel] = stiffnessFunction(obj.numNodesElem,obj.numDOFsNode,obj.nel,obj.xnod',obj.TnD2,obj.mD2,obj.TmD2);
+            [fel] = forceFunction(obj.numNodesElem,obj.numDOFsNode,obj.nel,obj.xnod',obj.TnD2,obj.fe,obj.me);
             obj.computeFD2();
-            [K,F] = assemblyFunction(obj.ndof,obj.nel,obj.nne,obj.ni,obj.TdD2,Kel,fel);
-            [up,vp] = applyBC(obj.ni,obj.pD2);
-            [F] = pointLoads(obj.ni,F,obj.FD2);
+            [K,F] = assemblyFunction(obj.ndof,obj.nel,obj.numNodesElem,obj.numDOFsNode,obj.TdD2,Kel,fel);
+            [up,vp] = applyBC(obj.numDOFsNode,obj.pD2);
+            [F] = pointLoads(obj.numDOFsNode,F,obj.FD2);
             [u,r] = solveSystem(obj.ndof,K,F,up,vp);
-            [xel,Sel,Mbel,Mtel] = internalforcesFunction(obj.nel,obj.ni,obj.nne,obj.xnod',obj.TnD2,obj.TdD2,Kel,u);
+            [xel,Sel,Mbel,Mtel] = internalforcesFunction(obj.nel,obj.numDOFsNode,obj.numNodesElem,obj.xnod',obj.TnD2,obj.TdD2,Kel,u);
         end
 
     end
@@ -45,8 +45,8 @@ classdef BeamSolver < handle
     methods (Access = private)
         
         function init(obj,cParams)
-            obj.nne = cParams.nne;
-            obj.ni  = cParams.ni;
+            obj.numNodesElem = cParams.numNodesElem;
+            obj.numDOFsNode  = cParams.numDOFsNode;
             obj.nel = cParams.nel;
             obj.xnod = cParams.xnod;
             obj.TnD2 = cParams.TnD2;
@@ -60,14 +60,14 @@ classdef BeamSolver < handle
             obj.be = cParams.be;
             obj.Me = cParams.Me;
             obj.g = cParams.g;
-            obj.d = cParams.d;
+            obj.beamWidth = cParams.beamWidth;
             obj.xi_p = cParams.xi_p;
             obj.x_s_prim = cParams.x_s_prim;
             obj.ze = cParams.ze;
         end
 
         function computeFD2(obj)
-            obj.FD2 = [find(obj.xnod == obj.be), 1, -obj.Me*obj.g; find(obj.xnod == obj.be), 3, -obj.Me*obj.g*(((obj.d + obj.xi_p) - obj.x_s_prim) - obj.ze)];
+            obj.FD2 = [find(obj.xnod == obj.be), 1, -obj.Me*obj.g; find(obj.xnod == obj.be), 3, -obj.Me*obj.g*(((obj.beamWidth + obj.xi_p) - obj.x_s_prim) - obj.ze)];
         end
 
     end
