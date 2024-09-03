@@ -30,12 +30,12 @@ classdef FEMBeamComputer < handle
         numElements
         ndof
         nodalConnec
-        TmD2
-        TdD2
+        materialConnec
+        dofsConnec
         fe
         me
-        pD2
-        be
+        fixedNodes
+        xEngine
         Me
         g
         ze
@@ -124,14 +124,14 @@ classdef FEMBeamComputer < handle
             bm.numElements      = obj.numElements;
             bm.xnod     = obj.xnod;
             bm.nodalConnec     = obj.nodalConnec;
-            bm.TdD2     = obj.TdD2;
+            bm.dofsConnec     = obj.dofsConnec;
             bm.mD2      = obj.mD2;
-            bm.TmD2     = obj.TmD2;
-            bm.pD2      = obj.pD2;
+            bm.materialConnec     = obj.materialConnec;
+            bm.fixedNodes      = obj.fixedNodes;
             bm.fe       = obj.fe;
             bm.me       = obj.me;
             bm.ndof     = obj.ndof;
-            bm.be       = obj.be;
+            bm.xEngine       = obj.xEngine;
             bm.Me       = obj.Me;
             bm.g        = obj.g;
             bm.beamWidth        = obj.beamWidth;
@@ -147,35 +147,35 @@ classdef FEMBeamComputer < handle
     methods (Access = private)
         
         function init(obj,cParams)
-            obj.beamWidth    = cParams.beamWidth;
-            obj.h1           = cParams.h1;
-            obj.h2           = cParams.h2;
-            obj.N1           = cParams.N1;
-            obj.N2           = cParams.N2;
-            obj.N3           = cParams.N3;
-            obj.materialProp = cParams.materialProp;
-            obj.open         = cParams.open;
-            obj.xBendMoment  = cParams.xBendMoment;
-            obj.yBendMoment  = cParams.yBendMoment;
-            obj.zBendMoment  = cParams.zBendMoment;
-            obj.xShearForce  = cParams.xShearForce;
-            obj.yShearForce  = cParams.yShearForce;
-            obj.E            = cParams.E;
-            obj.G            = cParams.G;
-            obj.numDOFsNode  = cParams.numDOFsNode;
-            obj.numNodesElem = cParams.numNodesElem;
-            obj.numElements  = cParams.numElements;
-            obj.wingspan     = cParams.wingspan;
-            obj.rhoInf       = cParams.rhoInf;
-            obj.vInf         = cParams.vInf;
-            obj.chord        = cParams.chord;
-            obj.Cl           = cParams.Cl;
-            obj.lambda       = cParams.lambda;
-            obj.nodalConnec  = cParams.nodalConnec;
-            obj.TmD2     = cParams.materialConnec;
-            obj.TdD2     = cParams.dofsConnec;
-            obj.pD2      = cParams.fixedNodes;
-            obj.be       = cParams.xEngine;
+            obj.beamWidth      = cParams.beamWidth;
+            obj.h1             = cParams.h1;
+            obj.h2             = cParams.h2;
+            obj.N1             = cParams.N1;
+            obj.N2             = cParams.N2;
+            obj.N3             = cParams.N3;
+            obj.materialProp   = cParams.materialProp;
+            obj.open           = cParams.open;
+            obj.xBendMoment    = cParams.xBendMoment;
+            obj.yBendMoment    = cParams.yBendMoment;
+            obj.zBendMoment    = cParams.zBendMoment;
+            obj.xShearForce    = cParams.xShearForce;
+            obj.yShearForce    = cParams.yShearForce;
+            obj.E              = cParams.E;
+            obj.G              = cParams.G;
+            obj.numDOFsNode    = cParams.numDOFsNode;
+            obj.numNodesElem   = cParams.numNodesElem;
+            obj.numElements    = cParams.numElements;
+            obj.wingspan       = cParams.wingspan;
+            obj.rhoInf         = cParams.rhoInf;
+            obj.vInf           = cParams.vInf;
+            obj.chord          = cParams.chord;
+            obj.Cl             = cParams.Cl;
+            obj.lambda         = cParams.lambda;
+            obj.nodalConnec    = cParams.nodalConnec;
+            obj.materialConnec = cParams.materialConnec;
+            obj.dofsConnec     = cParams.dofsConnec;
+            obj.fixedNodes     = cParams.fixedNodes;
+            obj.xEngine        = cParams.xEngine;
             obj.Me       = cParams.engineMass;
             obj.g        = cParams.g;
             obj.ze       = cParams.zEngine;
