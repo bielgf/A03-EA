@@ -12,7 +12,6 @@ classdef FEMBeamComputer < handle
         nodalSecConnec
         materialProp
         open
-        x_0_prim
         xShearCenter
         xSecInertia
         J
@@ -119,26 +118,26 @@ classdef FEMBeamComputer < handle
         end
 
         function computeBeamSolver(obj)
-            bm.numNodesElem      = obj.numNodesElem;
-            bm.numDOFsNode       = obj.numDOFsNode;
-            bm.numElements      = obj.numElements;
-            bm.xGlobal     = obj.xGlobal;
-            bm.nodalConnec     = obj.nodalConnec;
+            bm.numNodesElem   = obj.numNodesElem;
+            bm.numDOFsNode    = obj.numDOFsNode;
+            bm.numElements    = obj.numElements;
+            bm.xGlobal        = obj.xGlobal;
+            bm.nodalConnec    = obj.nodalConnec;
             bm.dofsConnec     = obj.dofsConnec;
-            bm.beamProp      = obj.beamProp;
-            bm.materialConnec     = obj.materialConnec;
-            bm.fixedNodes      = obj.fixedNodes;
-            bm.forceElem       = obj.forceElem;
-            bm.momentElem       = obj.momentElem;
-            bm.totalDOFs     = obj.totalDOFs;
-            bm.xEngine       = obj.xEngine;
-            bm.engineMass       = obj.engineMass;
-            bm.g        = obj.g;
-            bm.beamWidth        = obj.beamWidth;
-            bm.chiP     = obj.chiP;
-            bm.xShearCenter = obj.xShearCenter;
-            bm.zEngine       = obj.zEngine;
-            beam        = BeamSolver(bm);
+            bm.beamProp       = obj.beamProp;
+            bm.materialConnec = obj.materialConnec;
+            bm.fixedNodes     = obj.fixedNodes;
+            bm.forceElem      = obj.forceElem;
+            bm.momentElem     = obj.momentElem;
+            bm.totalDOFs      = obj.totalDOFs;
+            bm.xEngine        = obj.xEngine;
+            bm.engineMass     = obj.engineMass;
+            bm.g              = obj.g;
+            bm.beamWidth      = obj.beamWidth;
+            bm.chiP           = obj.chiP;
+            bm.xShearCenter   = obj.xShearCenter;
+            bm.zEngine        = obj.zEngine;
+            beam              = BeamSolver(bm);
             [obj.K,obj.F,obj.u,obj.r] = beam.compute();
         end
 
