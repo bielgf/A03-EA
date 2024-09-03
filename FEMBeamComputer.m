@@ -7,9 +7,9 @@ classdef FEMBeamComputer < handle
         N1
         N2
         N3
-        x_prim
-        Tm
-        Tn
+        xSection
+        materialSecConnec
+        nodalSecConnec
         materialProp
         open
         x_0_prim
@@ -21,7 +21,7 @@ classdef FEMBeamComputer < handle
         zBendMoment
         xShearForce
         yShearForce
-        mD2
+        beamProp
         E
         G
         xnod
@@ -77,43 +77,43 @@ classdef FEMBeamComputer < handle
             gd.h2        = obj.h2;
             gd.beamWidth = obj.beamWidth;
             geoDiscret   = GeometricDiscretizationSolver(gd);
-            [obj.x_prim,obj.Tm,obj.Tn] = geoDiscret.compute();
+            [obj.xSection,obj.materialSecConnec,obj.nodalSecConnec] = geoDiscret.compute();
         end
         
         function computeSectionSolver(obj)
-            s.x_prim   = obj.x_prim;
-            s.Tn       = obj.Tn;
+            s.xSection          = obj.xSection;
+            s.nodalSecConnec    = obj.nodalSecConnec;
             s.materialProp      = obj.materialProp;
-            s.Tm       = obj.Tm;
-            s.open     = obj.open;
-            s.xBendMoment = obj.xBendMoment;
-            s.yBendMoment = obj.yBendMoment;
-            s.zBendMoment = obj.zBendMoment;
-            s.xShearForce = obj.xShearForce;
-            s.yShearForce = obj.yShearForce;
-            sec        = SectionSolver(s);
+            s.materialSecConnec = obj.materialSecConnec;
+            s.open              = obj.open;
+            s.xBendMoment       = obj.xBendMoment;
+            s.yBendMoment       = obj.yBendMoment;
+            s.zBendMoment       = obj.zBendMoment;
+            s.xShearForce       = obj.xShearForce;
+            s.yShearForce       = obj.yShearForce;
+            sec                 = SectionSolver(s);
             [obj.sigma,obj.s_norm,obj.tau_s,obj.s_shear,obj.tau_t,obj.s_tor,obj.x_s_prim,obj.I_xx_prim,obj.J] = sec.compute();
         end
 
-        function computemD2(obj)
-            obj.mD2 = [obj.E   obj.G   obj.I_xx_prim  obj.J];
+        function computeBeamProp(obj)
+            obj.beamProp = [obj.E   obj.G   obj.I_xx_prim  obj.J];
         end
 
         function computeForceMomentElem(obj)
-            fm.numDOFsNode       = obj.numDOFsNode;
-            fm.numElements      = obj.numElements;
-            fm.wingspan        = obj.wingspan;
-            fm.rhoInf   = obj.rhoInf;
-            fm.vInf     = obj.vInf;
-            fm.chord    = obj.chord;
-            fm.Cl       = obj.Cl;
-            fm.lambda   = obj.lambda;
-            fm.g        = obj.g;
-            fm.beamWidth        = obj.beamWidth;
-            fm.chiP     = obj.chiP;
-            fm.aeroCenter       = obj.aeroCenter;
-            fm.centerOfMass       = obj.centerOfMass;
-            fm.x_s_prim = obj.x_s_prim;
+            fm.numDOFsNode  = obj.numDOFsNode;
+            fm.numElements  = obj.numElements;
+            fm.wingspan     = obj.wingspan;
+            fm.rhoInf       = obj.rhoInf;
+            fm.vInf         = obj.vInf;
+            fm.chord        = obj.chord;
+            fm.Cl           = obj.Cl;
+            fm.lambda       = obj.lambda;
+            fm.g            = obj.g;
+            fm.beamWidth    = obj.beamWidth;
+            fm.chiP         = obj.chiP;
+            fm.aeroCenter   = obj.aeroCenter;
+            fm.centerOfMass = obj.centerOfMass;
+            fm.x_s_prim     = obj.x_s_prim;
             forceMomentElem = ForceMomentElemCompute(fm);
             [obj.xnod,obj.fe,obj.me,obj.ndof] = forceMomentElem.compute();
         end
@@ -125,7 +125,7 @@ classdef FEMBeamComputer < handle
             bm.xnod     = obj.xnod;
             bm.nodalConnec     = obj.nodalConnec;
             bm.dofsConnec     = obj.dofsConnec;
-            bm.mD2      = obj.mD2;
+            bm.beamProp      = obj.beamProp;
             bm.materialConnec     = obj.materialConnec;
             bm.fixedNodes      = obj.fixedNodes;
             bm.fe       = obj.fe;

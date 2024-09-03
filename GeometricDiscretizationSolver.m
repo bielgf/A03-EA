@@ -15,8 +15,8 @@ classdef GeometricDiscretizationSolver < handle
             obj.init(cParams);
         end
 
-        function [x_prim,Tm,Tn] = compute(obj)
-            [x_prim,Tm,Tn] = GeometricDiscret(obj.N1,obj.N2,obj.N3,obj.beamWidth,obj.h1,obj.h2);
+        function [xSection,materialSecConnec,nodalSecConnec] = compute(obj)
+            [xSection,materialSecConnec,nodalSecConnec] = GeometricDiscret(obj.N1,obj.N2,obj.N3,obj.beamWidth,obj.h1,obj.h2);
         end
 
     end

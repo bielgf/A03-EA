@@ -7,7 +7,7 @@ classdef BeamSolver < handle
         xnod
         nodalConnec
         dofsConnec
-        mD2
+        beamProp
         materialConnec
         fixedNodes
         fe
@@ -30,7 +30,7 @@ classdef BeamSolver < handle
         end
 
         function [K,F,u,r] = compute(obj)
-            [Kel] = stiffnessFunction(obj.numNodesElem,obj.numDOFsNode,obj.numElements,obj.xnod',obj.nodalConnec,obj.mD2,obj.materialConnec);
+            [Kel] = stiffnessFunction(obj.numNodesElem,obj.numDOFsNode,obj.numElements,obj.xnod',obj.nodalConnec,obj.beamProp,obj.materialConnec);
             [fel] = forceFunction(obj.numNodesElem,obj.numDOFsNode,obj.numElements,obj.xnod',obj.nodalConnec,obj.fe,obj.me);
             obj.computeFD2();
             [K,F] = assemblyFunction(obj.ndof,obj.numElements,obj.numNodesElem,obj.numDOFsNode,obj.dofsConnec,Kel,fel);
@@ -51,7 +51,7 @@ classdef BeamSolver < handle
             obj.xnod = cParams.xnod;
             obj.nodalConnec = cParams.nodalConnec;
             obj.dofsConnec = cParams.dofsConnec;
-            obj.mD2 = cParams.mD2;
+            obj.beamProp = cParams.beamProp;
             obj.materialConnec = cParams.materialConnec;
             obj.fixedNodes = cParams.fixedNodes;
             obj.fe = cParams.fe;

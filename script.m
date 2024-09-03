@@ -94,7 +94,7 @@ m.computeGeoDiscret();
 
 m.computeSectionSolver();
 
-m.computemD2();
+m.computeBeamProp();
 m.computeForceMomentElem();
 
 % BEAM SOLVER -------------------------------------------------------------
