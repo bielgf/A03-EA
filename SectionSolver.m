@@ -14,15 +14,15 @@ classdef SectionSolver < handle
     end
 
     methods (Access = public)
-        
+
         function obj = SectionSolver(cParams)
             obj.init(cParams);
         end
 
-        function [sigma,s_norm,tau_s,s_shear,tau_t,s_tor,x_s_prim,I_xx_prim,J] = compute(obj)
-            [x_0_prim,y_0_prim,x_s_prim,y_s_prim,~,I_xx_prim,I_yy_prim,I_xy_prim,J,A_in] = sectionProperties(obj.xSection,obj.nodalSecConnec,obj.materialProp,obj.materialSecConnec,obj.open);
-            [sigma,s_norm] = normalStressDistribution(obj.xSection,obj.nodalSecConnec,x_0_prim,y_0_prim,I_xx_prim,I_yy_prim,I_xy_prim,obj.xBendMoment,obj.yBendMoment);
-            [tau_s,s_shear] = tangentialStressDistributionShear(obj.xSection,obj.nodalSecConnec,obj.materialProp,obj.materialSecConnec,x_0_prim,y_0_prim,I_xx_prim,I_yy_prim,I_xy_prim,obj.xShearForce,obj.yShearForce,x_s_prim,y_s_prim,A_in,obj.open);
+        function [sigma,s_norm,tau_s,s_shear,tau_t,s_tor,xShearCenter,xSecInertia,J] = compute(obj)
+            [x_0_prim,y_0_prim,xShearCenter,y_s_prim,~,xSecInertia,I_yy_prim,I_xy_prim,J,A_in] = sectionProperties(obj.xSection,obj.nodalSecConnec,obj.materialProp,obj.materialSecConnec,obj.open);
+            [sigma,s_norm] = normalStressDistribution(obj.xSection,obj.nodalSecConnec,x_0_prim,y_0_prim,xSecInertia,I_yy_prim,I_xy_prim,obj.xBendMoment,obj.yBendMoment);
+            [tau_s,s_shear] = tangentialStressDistributionShear(obj.xSection,obj.nodalSecConnec,obj.materialProp,obj.materialSecConnec,x_0_prim,y_0_prim,xSecInertia,I_yy_prim,I_xy_prim,obj.xShearForce,obj.yShearForce,xShearCenter,y_s_prim,A_in,obj.open);
             [tau_t,s_tor] = tangentialStressDistributionTorsion(obj.xSection,obj.nodalSecConnec,obj.materialProp,obj.materialSecConnec,obj.zBendMoment,J,obj.open,A_in);
         end
 

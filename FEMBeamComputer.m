@@ -13,8 +13,8 @@ classdef FEMBeamComputer < handle
         materialProp
         open
         x_0_prim
-        x_s_prim
-        I_xx_prim
+        xShearCenter
+        xSecInertia
         J
         xBendMoment
         yBendMoment
@@ -24,16 +24,16 @@ classdef FEMBeamComputer < handle
         beamProp
         E
         G
-        xnod
+        xGlobal
         numDOFsNode
         numNodesElem
         numElements
-        ndof
+        totalDOFs
         nodalConnec
         materialConnec
         dofsConnec
-        fe
-        me
+        forceElem
+        momentElem
         fixedNodes
         xEngine
         engineMass
@@ -92,11 +92,11 @@ classdef FEMBeamComputer < handle
             s.xShearForce       = obj.xShearForce;
             s.yShearForce       = obj.yShearForce;
             sec                 = SectionSolver(s);
-            [obj.sigma,obj.s_norm,obj.tau_s,obj.s_shear,obj.tau_t,obj.s_tor,obj.x_s_prim,obj.I_xx_prim,obj.J] = sec.compute();
+            [obj.sigma,obj.s_norm,obj.tau_s,obj.s_shear,obj.tau_t,obj.s_tor,obj.xShearCenter,obj.xSecInertia,obj.J] = sec.compute();
         end
 
         function computeBeamProp(obj)
-            obj.beamProp = [obj.E   obj.G   obj.I_xx_prim  obj.J];
+            obj.beamProp = [obj.E   obj.G   obj.xSecInertia  obj.J];
         end
 
         function computeForceMomentElem(obj)
@@ -113,30 +113,30 @@ classdef FEMBeamComputer < handle
             fm.chiP         = obj.chiP;
             fm.aeroCenter   = obj.aeroCenter;
             fm.centerOfMass = obj.centerOfMass;
-            fm.x_s_prim     = obj.x_s_prim;
+            fm.xShearCenter = obj.xShearCenter;
             forceMomentElem = ForceMomentElemCompute(fm);
-            [obj.xnod,obj.fe,obj.me,obj.ndof] = forceMomentElem.compute();
+            [obj.xGlobal,obj.forceElem,obj.momentElem,obj.totalDOFs] = forceMomentElem.compute();
         end
 
         function computeBeamSolver(obj)
             bm.numNodesElem      = obj.numNodesElem;
             bm.numDOFsNode       = obj.numDOFsNode;
             bm.numElements      = obj.numElements;
-            bm.xnod     = obj.xnod;
+            bm.xGlobal     = obj.xGlobal;
             bm.nodalConnec     = obj.nodalConnec;
             bm.dofsConnec     = obj.dofsConnec;
             bm.beamProp      = obj.beamProp;
             bm.materialConnec     = obj.materialConnec;
             bm.fixedNodes      = obj.fixedNodes;
-            bm.fe       = obj.fe;
-            bm.me       = obj.me;
-            bm.ndof     = obj.ndof;
+            bm.forceElem       = obj.forceElem;
+            bm.momentElem       = obj.momentElem;
+            bm.totalDOFs     = obj.totalDOFs;
             bm.xEngine       = obj.xEngine;
             bm.engineMass       = obj.engineMass;
             bm.g        = obj.g;
             bm.beamWidth        = obj.beamWidth;
             bm.chiP     = obj.chiP;
-            bm.x_s_prim = obj.x_s_prim;
+            bm.xShearCenter = obj.xShearCenter;
             bm.zEngine       = obj.zEngine;
             beam        = BeamSolver(bm);
             [obj.K,obj.F,obj.u,obj.r] = beam.compute();
