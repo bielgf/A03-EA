@@ -2,7 +2,7 @@ classdef SectionSolver < handle
 
     properties (Access = private)
         x_prim  % xDomain, xSection, xGlobal, xLocal.. ?
-        Tn      % connec
+        Tn
         materialProp
         Tm
         open

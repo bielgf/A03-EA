@@ -4,10 +4,10 @@ classdef ForceMomentElemCompute < handle
         numDOFsNode
         numElements
         wingspan
-        rhoInf
-        vInf
-        chord
-        Cl
+        rhoinf
+        vinf
+        c
+        cl
         lambda
         g
         d
@@ -24,7 +24,7 @@ classdef ForceMomentElemCompute < handle
         end
 
         function [xnod,fe,me,ndof] = compute(obj)
-            [xnod,fe,me] = GetForceMomentElement(obj.numElements,obj.wingspan,obj.rhoInf,obj.vInf,obj.chord,obj.Cl,obj.lambda,obj.g,obj.d,obj.xi_p,obj.za,obj.zm,obj.x_s_prim);
+            [xnod,fe,me] = GetForceMomentElement(obj.numElements,obj.wingspan,obj.rhoinf,obj.vinf,obj.c,obj.cl,obj.lambda,obj.g,obj.d,obj.xi_p,obj.za,obj.zm,obj.x_s_prim);
             nnod = size(xnod,2);
             ndof = nnod*obj.numDOFsNode;
         end
@@ -36,11 +36,11 @@ classdef ForceMomentElemCompute < handle
         function init(obj,cParams)
             obj.numDOFsNode       = cParams.numDOFsNode;
             obj.numElements      = cParams.numElements;
-            obj.wingspan        = cParams.wingspan;
-            obj.rhoInf   = cParams.rhoInf;
-            obj.vInf     = cParams.vInf;
-            obj.chord        = cParams.chord;
-            obj.Cl       = cParams.Cl;
+            obj.wingspan        = cParams.b;
+            obj.rhoinf   = cParams.rhoinf;
+            obj.vinf     = cParams.vinf;
+            obj.c        = cParams.c;
+            obj.cl       = cParams.cl;
             obj.lambda   = cParams.lambda;
             obj.g        = cParams.g;
             obj.d        = cParams.d;

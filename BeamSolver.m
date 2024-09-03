@@ -3,7 +3,7 @@ classdef BeamSolver < handle
     properties (Access = private)
         numNodesElem
         numDOFsNode
-        nel
+        numElements
         xnod
         TnD2
         TdD2
@@ -30,14 +30,14 @@ classdef BeamSolver < handle
         end
 
         function [K,F,u,r] = compute(obj)
-            [Kel] = stiffnessFunction(obj.numNodesElem,obj.numDOFsNode,obj.nel,obj.xnod',obj.TnD2,obj.mD2,obj.TmD2);
-            [fel] = forceFunction(obj.numNodesElem,obj.numDOFsNode,obj.nel,obj.xnod',obj.TnD2,obj.fe,obj.me);
+            [Kel] = stiffnessFunction(obj.numNodesElem,obj.numDOFsNode,obj.numElements,obj.xnod',obj.TnD2,obj.mD2,obj.TmD2);
+            [fel] = forceFunction(obj.numNodesElem,obj.numDOFsNode,obj.numElements,obj.xnod',obj.TnD2,obj.fe,obj.me);
             obj.computeFD2();
-            [K,F] = assemblyFunction(obj.ndof,obj.nel,obj.numNodesElem,obj.numDOFsNode,obj.TdD2,Kel,fel);
+            [K,F] = assemblyFunction(obj.ndof,obj.numElements,obj.numNodesElem,obj.numDOFsNode,obj.TdD2,Kel,fel);
             [up,vp] = applyBC(obj.numDOFsNode,obj.pD2);
             [F] = pointLoads(obj.numDOFsNode,F,obj.FD2);
             [u,r] = solveSystem(obj.ndof,K,F,up,vp);
-            [xel,Sel,Mbel,Mtel] = internalforcesFunction(obj.nel,obj.numDOFsNode,obj.numNodesElem,obj.xnod',obj.TnD2,obj.TdD2,Kel,u);
+            [xel,Sel,Mbel,Mtel] = internalforcesFunction(obj.numElements,obj.numDOFsNode,obj.numNodesElem,obj.xnod',obj.TnD2,obj.TdD2,Kel,u);
         end
 
     end
@@ -47,7 +47,7 @@ classdef BeamSolver < handle
         function init(obj,cParams)
             obj.numNodesElem = cParams.numNodesElem;
             obj.numDOFsNode  = cParams.numDOFsNode;
-            obj.nel = cParams.nel;
+            obj.numElements = cParams.numElements;
             obj.xnod = cParams.xnod;
             obj.TnD2 = cParams.TnD2;
             obj.TdD2 = cParams.TdD2;
