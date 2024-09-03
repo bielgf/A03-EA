@@ -38,6 +38,7 @@ classdef studyOfCnvg < handle
                 m.computeSectionSolver();
                 m.computeBeamProp();
                 m.computeForceMomentElem();
+                m.computeExternalForce();
                 m.computeBeamSolver();
                 
                 u_conv(:,nel) = m.u(end-2:end);

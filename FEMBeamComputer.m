@@ -33,6 +33,7 @@ classdef FEMBeamComputer < handle
         dofsConnec
         forceElem
         momentElem
+        externalForce
         fixedNodes
         xEngine
         engineMass
@@ -117,6 +118,11 @@ classdef FEMBeamComputer < handle
             [obj.xGlobal,obj.forceElem,obj.momentElem,obj.totalDOFs] = forceMomentElem.compute();
         end
 
+        function computeExternalForce(obj)
+            obj.externalForce = [find(obj.xGlobal == obj.xEngine), 1, -obj.engineMass*obj.g;
+                                 find(obj.xGlobal == obj.xEngine), 3, -obj.engineMass*obj.g*(((obj.beamWidth + obj.chiP) - obj.xShearCenter) - obj.zEngine)];
+        end
+
         function computeBeamSolver(obj)
             bm.numNodesElem   = obj.numNodesElem;
             bm.numDOFsNode    = obj.numDOFsNode;
@@ -129,14 +135,8 @@ classdef FEMBeamComputer < handle
             bm.fixedNodes     = obj.fixedNodes;
             bm.forceElem      = obj.forceElem;
             bm.momentElem     = obj.momentElem;
+            bm.externalForce  = obj.externalForce;
             bm.totalDOFs      = obj.totalDOFs;
-            bm.xEngine        = obj.xEngine;
-            bm.engineMass     = obj.engineMass;
-            bm.g              = obj.g;
-            bm.beamWidth      = obj.beamWidth;
-            bm.chiP           = obj.chiP;
-            bm.xShearCenter   = obj.xShearCenter;
-            bm.zEngine        = obj.zEngine;
             beam              = BeamSolver(bm);
             [obj.K,obj.F,obj.u,obj.r] = beam.compute();
         end

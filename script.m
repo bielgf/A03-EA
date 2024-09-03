@@ -99,6 +99,8 @@ m.computeForceMomentElem();
 
 % BEAM SOLVER -------------------------------------------------------------
 
+m.computeExternalForce();
+
 m.computeBeamSolver();
 
 %% PLOTTING ---------------------------------------------------------------
