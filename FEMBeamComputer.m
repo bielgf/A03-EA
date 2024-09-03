@@ -29,7 +29,7 @@ classdef FEMBeamComputer < handle
         numNodesElem
         numElements
         ndof
-        TnD2
+        nodalConnec
         TmD2
         TdD2
         fe
@@ -123,7 +123,7 @@ classdef FEMBeamComputer < handle
             bm.numDOFsNode       = obj.numDOFsNode;
             bm.numElements      = obj.numElements;
             bm.xnod     = obj.xnod;
-            bm.TnD2     = obj.TnD2;
+            bm.nodalConnec     = obj.nodalConnec;
             bm.TdD2     = obj.TdD2;
             bm.mD2      = obj.mD2;
             bm.TmD2     = obj.TmD2;
@@ -171,7 +171,7 @@ classdef FEMBeamComputer < handle
             obj.chord        = cParams.chord;
             obj.Cl           = cParams.Cl;
             obj.lambda       = cParams.lambda;
-            obj.TnD2     = cParams.nodalConnec;
+            obj.nodalConnec  = cParams.nodalConnec;
             obj.TmD2     = cParams.materialConnec;
             obj.TdD2     = cParams.dofsConnec;
             obj.pD2      = cParams.fixedNodes;
