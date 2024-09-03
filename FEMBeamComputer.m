@@ -36,18 +36,18 @@ classdef FEMBeamComputer < handle
         me
         fixedNodes
         xEngine
-        Me
+        engineMass
         g
-        ze
-        xi_p
+        zEngine
         wingspan
         rhoInf
         vInf
         chord
         Cl
         lambda
-        za
-        zm
+        aeroCenter
+        centerOfMass
+        chiP
     end
 
     properties (Access = public)
@@ -109,10 +109,10 @@ classdef FEMBeamComputer < handle
             fm.Cl       = obj.Cl;
             fm.lambda   = obj.lambda;
             fm.g        = obj.g;
-            fm.d        = obj.beamWidth;
-            fm.xi_p     = obj.xi_p;
-            fm.za       = obj.za;
-            fm.zm       = obj.zm;
+            fm.beamWidth        = obj.beamWidth;
+            fm.chiP     = obj.chiP;
+            fm.aeroCenter       = obj.aeroCenter;
+            fm.centerOfMass       = obj.centerOfMass;
             fm.x_s_prim = obj.x_s_prim;
             forceMomentElem = ForceMomentElemCompute(fm);
             [obj.xnod,obj.fe,obj.me,obj.ndof] = forceMomentElem.compute();
@@ -132,12 +132,12 @@ classdef FEMBeamComputer < handle
             bm.me       = obj.me;
             bm.ndof     = obj.ndof;
             bm.xEngine       = obj.xEngine;
-            bm.Me       = obj.Me;
+            bm.engineMass       = obj.engineMass;
             bm.g        = obj.g;
             bm.beamWidth        = obj.beamWidth;
-            bm.xi_p     = obj.xi_p;
+            bm.chiP     = obj.chiP;
             bm.x_s_prim = obj.x_s_prim;
-            bm.ze       = obj.ze;
+            bm.zEngine       = obj.zEngine;
             beam        = BeamSolver(bm);
             [obj.K,obj.F,obj.u,obj.r] = beam.compute();
         end
@@ -176,12 +176,12 @@ classdef FEMBeamComputer < handle
             obj.dofsConnec     = cParams.dofsConnec;
             obj.fixedNodes     = cParams.fixedNodes;
             obj.xEngine        = cParams.xEngine;
-            obj.Me       = cParams.engineMass;
-            obj.g        = cParams.g;
-            obj.ze       = cParams.zEngine;
-            obj.za       = cParams.aeroCenter;
-            obj.zm       = cParams.centerOfMass;
-            obj.xi_p     = cParams.chiP;
+            obj.engineMass     = cParams.engineMass;
+            obj.g              = cParams.g;
+            obj.zEngine        = cParams.zEngine;
+            obj.aeroCenter     = cParams.aeroCenter;
+            obj.centerOfMass   = cParams.centerOfMass;
+            obj.chiP           = cParams.chiP;
         end
 
     end

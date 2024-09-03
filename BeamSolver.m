@@ -15,12 +15,12 @@ classdef BeamSolver < handle
         ndof
         FD2
         xEngine
-        Me
+        engineMass
         g
         beamWidth
-        xi_p
+        chiP
         x_s_prim
-        ze
+        zEngine
     end
 
     methods (Access = public)
@@ -58,17 +58,17 @@ classdef BeamSolver < handle
             obj.me = cParams.me;
             obj.ndof = cParams.ndof;
             obj.xEngine = cParams.xEngine;
-            obj.Me = cParams.Me;
+            obj.engineMass = cParams.engineMass;
             obj.g = cParams.g;
             obj.beamWidth = cParams.beamWidth;
-            obj.xi_p = cParams.xi_p;
+            obj.chiP = cParams.chiP;
             obj.x_s_prim = cParams.x_s_prim;
-            obj.ze = cParams.ze;
+            obj.zEngine = cParams.zEngine;
         end
 
         function computeFD2(obj)
-            obj.FD2 = [find(obj.xnod == obj.xEngine), 1, -obj.Me*obj.g;
-                       find(obj.xnod == obj.xEngine), 3, -obj.Me*obj.g*(((obj.beamWidth + obj.xi_p) - obj.x_s_prim) - obj.ze)];
+            obj.FD2 = [find(obj.xnod == obj.xEngine), 1, -obj.engineMass*obj.g;
+                       find(obj.xnod == obj.xEngine), 3, -obj.engineMass*obj.g*(((obj.beamWidth + obj.chiP) - obj.x_s_prim) - obj.zEngine)];
         end
 
     end

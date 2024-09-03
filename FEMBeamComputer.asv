@@ -29,25 +29,24 @@ classdef FEMBeamComputer < handle
         numNodesElem
         numElements
         ndof
-        TnD2
-        TmD2
-        TdD2
+        nodalConnec
+        materialConnec
+        dofsConnec
         fe
         me
-        pD2
-        be
-        Me
+        fixedNodes
+        xEngine
+        engineMass
         g
-        ze
-        xi_p
+        zEngine
         wingspan
         rhoInf
         vInf
         chord
         Cl
         lambda
-        za
-        zm
+        aeroCenter
+        centerOfMass
     end
 
     properties (Access = public)
@@ -109,10 +108,10 @@ classdef FEMBeamComputer < handle
             fm.Cl       = obj.Cl;
             fm.lambda   = obj.lambda;
             fm.g        = obj.g;
-            fm.d        = obj.beamWidth;
+            fm.beamWidth        = obj.beamWidth;
             fm.xi_p     = obj.xi_p;
-            fm.za       = obj.za;
-            fm.zm       = obj.zm;
+            fm.aeroCenter       = obj.aeroCenter;
+            fm.centerOfMass       = obj.centerOfMass;
             fm.x_s_prim = obj.x_s_prim;
             forceMomentElem = ForceMomentElemCompute(fm);
             [obj.xnod,obj.fe,obj.me,obj.ndof] = forceMomentElem.compute();
@@ -123,21 +122,21 @@ classdef FEMBeamComputer < handle
             bm.numDOFsNode       = obj.numDOFsNode;
             bm.numElements      = obj.numElements;
             bm.xnod     = obj.xnod;
-            bm.TnD2     = obj.TnD2;
-            bm.TdD2     = obj.TdD2;
+            bm.nodalConnec     = obj.nodalConnec;
+            bm.dofsConnec     = obj.dofsConnec;
             bm.mD2      = obj.mD2;
-            bm.TmD2     = obj.TmD2;
-            bm.pD2      = obj.pD2;
+            bm.materialConnec     = obj.materialConnec;
+            bm.fixedNodes      = obj.fixedNodes;
             bm.fe       = obj.fe;
             bm.me       = obj.me;
             bm.ndof     = obj.ndof;
-            bm.be       = obj.be;
-            bm.Me       = obj.Me;
+            bm.xEngine       = obj.xEngine;
+            bm.engineMass       = obj.engineMass;
             bm.g        = obj.g;
             bm.beamWidth        = obj.beamWidth;
             bm.xi_p     = obj.xi_p;
             bm.x_s_prim = obj.x_s_prim;
-            bm.ze       = obj.ze;
+            bm.zEngine       = obj.zEngine;
             beam        = BeamSolver(bm);
             [obj.K,obj.F,obj.u,obj.r] = beam.compute();
         end
@@ -147,41 +146,41 @@ classdef FEMBeamComputer < handle
     methods (Access = private)
         
         function init(obj,cParams)
-            obj.beamWidth    = cParams.beamWidth;
-            obj.h1           = cParams.h1;
-            obj.h2           = cParams.h2;
-            obj.N1           = cParams.N1;
-            obj.N2           = cParams.N2;
-            obj.N3           = cParams.N3;
-            obj.materialProp = cParams.materialProp;
-            obj.open         = cParams.open;
-            obj.xBendMoment  = cParams.xBendMoment;
-            obj.yBendMoment  = cParams.yBendMoment;
-            obj.zBendMoment  = cParams.zBendMoment;
-            obj.xShearForce  = cParams.xShearForce;
-            obj.yShearForce  = cParams.yShearForce;
-            obj.E            = cParams.E;
-            obj.G            = cParams.G;
-            obj.numDOFsNode  = cParams.numDOFsNode;
-            obj.numNodesElem = cParams.numNodesElem;
-            obj.numElements  = cParams.numElements;
-            obj.wingspan     = cParams.wingspan;
-            obj.rhoInf       = cParams.rhoInf;
-            obj.vInf         = cParams.vInf;
-            obj.chord        = cParams.chord;
-            obj.Cl           = cParams.Cl;
-            obj.lambda       = cParams.lambda;
-            obj.TnD2     = cParams.nodalConnec;
-            obj.TmD2     = cParams.materialConnec;
-            obj.TdD2     = cParams.dofsConnec;
-            obj.pD2      = cParams.fixedNodes;
-            obj.be       = cParams.xEngine;
-            obj.Me       = cParams.engineMass;
-            obj.g        = cParams.g;
-            obj.ze       = cParams.zEngine;
-            obj.za       = cParams.aeroCenter;
-            obj.zm       = cParams.centerOfMass;
-            obj.xi_p     = cParams.chiP;
+            obj.beamWidth      = cParams.beamWidth;
+            obj.h1             = cParams.h1;
+            obj.h2             = cParams.h2;
+            obj.N1             = cParams.N1;
+            obj.N2             = cParams.N2;
+            obj.N3             = cParams.N3;
+            obj.materialProp   = cParams.materialProp;
+            obj.open           = cParams.open;
+            obj.xBendMoment    = cParams.xBendMoment;
+            obj.yBendMoment    = cParams.yBendMoment;
+            obj.zBendMoment    = cParams.zBendMoment;
+            obj.xShearForce    = cParams.xShearForce;
+            obj.yShearForce    = cParams.yShearForce;
+            obj.E              = cParams.E;
+            obj.G              = cParams.G;
+            obj.numDOFsNode    = cParams.numDOFsNode;
+            obj.numNodesElem   = cParams.numNodesElem;
+            obj.numElements    = cParams.numElements;
+            obj.wingspan       = cParams.wingspan;
+            obj.rhoInf         = cParams.rhoInf;
+            obj.vInf           = cParams.vInf;
+            obj.chord          = cParams.chord;
+            obj.Cl             = cParams.Cl;
+            obj.lambda         = cParams.lambda;
+            obj.nodalConnec    = cParams.nodalConnec;
+            obj.materialConnec = cParams.materialConnec;
+            obj.dofsConnec     = cParams.dofsConnec;
+            obj.fixedNodes     = cParams.fixedNodes;
+            obj.xEngine        = cParams.xEngine;
+            obj.engineMass     = cParams.engineMass;
+            obj.g              = cParams.g;
+            obj.zEngine        = cParams.zEngine;
+            obj.aeroCenter     = cParams.aeroCenter;
+            obj.centerOfMass   = cParams.centerOfMass;
+            obj.chiP           = cParams.chiP;
         end
 
     end
