@@ -7,13 +7,8 @@ classdef FEMBeamComputer < handle
 
     properties (Access = private)
         geomParams
-        connec
 
-        h1
-        h2
-        N1
-        N2
-        N3
+        connec
         
         xSection
         materialSecConnec
@@ -92,13 +87,8 @@ classdef FEMBeamComputer < handle
         
         function init(obj,cParams)
             obj.geomParams     = cParams.geomParams;
-            obj.h1             = cParams.h1; % delete
-            obj.h2             = cParams.h2; % delete
-            obj.N1             = cParams.N1; % delete
-            obj.N2             = cParams.N2; % delete
-            obj.N3             = cParams.N3; % delete
+
             obj.materialProp   = cParams.materialProp;
-            obj.open           = cParams.open;
             obj.xBendMoment    = cParams.xBendMoment;
             obj.yBendMoment    = cParams.yBendMoment;
             obj.zBendMoment    = cParams.zBendMoment;
@@ -129,12 +119,7 @@ classdef FEMBeamComputer < handle
         end
 
         function computeGeoDiscret(obj)
-            gd.N1        = obj.N1;
-            gd.N2        = obj.N2;
-            gd.N3        = obj.N3;
-            gd.h1        = obj.h1;
-            gd.h2        = obj.h2;
-            gd.beamWidth = obj.geomParams.beamWidth;
+            gd = obj.geomParams;
             geoDiscret   = GeometricDiscretizationSolver(gd);
             [obj.xSection,obj.materialSecConnec,obj.nodalSecConnec] = geoDiscret.compute();
         end

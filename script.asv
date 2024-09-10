@@ -92,10 +92,10 @@ s = data; % NO!!
 s.geomParams.beamWidth = data.beamWidth;
 s.geomParams.h1        = data.h1;
 s.geomParams.h2        = data.h2;
-s.geomParams.N1        = data.N1;
-s.geomParams.N2        = data.N2;
-s.geomParams.N3        = data.N3;
-s.geomParams.open      = data.open;
+s.geomParams.h3        = data.h3;
+s.geomParams.N1        = data.h1;
+s.geomParams.N2        = data.h2;
+s.geomParams.N3        = data.h3;
 
 
 m = FEMBeamComputer(s);
