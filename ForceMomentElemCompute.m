@@ -13,7 +13,7 @@ classdef ForceMomentElemCompute < handle
         beamWidth
         chiP
         aeroCenter
-        centerOfMass
+        gravCenter
         xShearCenter
     end
 
@@ -25,7 +25,7 @@ classdef ForceMomentElemCompute < handle
 
         function [xGlobal,forceElem,momentElem,totalDOFs] = compute(obj)
             %nElem = obj.numElements;
-            [xGlobal,forceElem,momentElem] = GetForceMomentElement(obj.numElements,obj.wingspan,obj.rhoInf,obj.vInf,obj.chord,obj.Cl,obj.lambda,obj.g,obj.beamWidth,obj.chiP,obj.aeroCenter,obj.centerOfMass,obj.xShearCenter);
+            [xGlobal,forceElem,momentElem] = GetForceMomentElement(obj.numElements,obj.wingspan,obj.rhoInf,obj.vInf,obj.chord,obj.Cl,obj.lambda,obj.g,obj.beamWidth,obj.chiP,obj.aeroCenter,obj.gravCenter,obj.xShearCenter);
             nnod = size(xGlobal,2);
             totalDOFs = nnod*obj.numDOFsNode;
         end
@@ -47,7 +47,7 @@ classdef ForceMomentElemCompute < handle
             obj.beamWidth    = cParams.beamWidth;
             obj.chiP         = cParams.chiP;
             obj.aeroCenter   = cParams.aeroCenter;
-            obj.centerOfMass = cParams.centerOfMass;
+            obj.gravCenter   = cParams.gravCenter;
             obj.xShearCenter = cParams.xShearCenter;
         end
 

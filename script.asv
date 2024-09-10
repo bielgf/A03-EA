@@ -17,7 +17,7 @@ data.t2 = 15*10^(-3);                         % m
 data.t3 = 3.5*10^(-3);                        % m
 
 data.aeroCenter   = 0.25*data.chord;          % m
-data.centerOfMass = 0.48*data.chord;          % m
+data.gravCenter   = 0.48*data.chord;          % m
 data.zEngine      = 0.3*data.chord;           % m
 data.xEngine      = 0.25*data.wingspan;       % m
 data.lambda       = 140;                      % Kg/m
@@ -90,12 +90,21 @@ data.fixedNodes = [ % node, direction, value
 s = data; % NO!!
 
 s.geomParams.beamWidth = data.beamWidth;
+s.geomParams.chord     = data.chord;
+s.geomParams.wingspan  = data.wingspan;
+s.geomParams.chiP      = data.chiP;
+s.geomParams.aeroCenter = data.aeroCenter;
+s.geomParams.gravCenter = data.gravCenter;
 s.geomParams.h1        = data.h1;
 s.geomParams.h2        = data.h2;
-s.geomParams.h3        = data.h3;
-s.geomParams.N1        = data.h1;
-s.geomParams.N2        = data.h2;
-s.geomParams.N3        = data.h3;
+s.geomParams.N1        = data.N1;
+s.geomParams.N2        = data.N2;
+s.geomParams.N3        = data.N3;
+s.geomParams.open      = data.open;
+
+s.aeroParams.Cl     = data.Cl;
+s.aeroParams.rhoInf = data.rhoInf;
+s.aeroParams.vInf     
 
 
 m = FEMBeamComputer(s);
