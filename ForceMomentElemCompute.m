@@ -24,6 +24,7 @@ classdef ForceMomentElemCompute < handle
         end
 
         function [xGlobal,forceElem,momentElem,totalDOFs] = compute(obj)
+            %nElem = obj.numElements;
             [xGlobal,forceElem,momentElem] = GetForceMomentElement(obj.numElements,obj.wingspan,obj.rhoInf,obj.vInf,obj.chord,obj.Cl,obj.lambda,obj.g,obj.beamWidth,obj.chiP,obj.aeroCenter,obj.centerOfMass,obj.xShearCenter);
             nnod = size(xGlobal,2);
             totalDOFs = nnod*obj.numDOFsNode;

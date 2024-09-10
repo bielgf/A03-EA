@@ -3,7 +3,7 @@ classdef FEMBeamComputer < handle
     % ToDo:
     %- Simplificar properties
     %- Eliminar properties publiques que no fem servir
-    %- Veure comentaris específics en el codi
+    %- 
 
     properties (Access = private)
         geomParams
@@ -181,13 +181,8 @@ classdef FEMBeamComputer < handle
             xG = obj.xGlobal;
             xE = obj.xEngine;
             % ...
-            F11 = find(xG == xE);
-            F21 = F11;
-            % ...
-            obj.externalForce = [F11, 1, -obj.engineMass*obj.g;
-                F21, 3, -obj.engineMass*obj.g*(((obj.geomParams.beamWidth + obj.chiP) - obj.xShearCenter) - obj.zEngine)];
-
-            % Create a class for external force
+            obj.externalForce = [find(xG == xE), 1, -obj.engineMass*obj.g;
+                find(xG == xE), 3, -obj.engineMass*obj.g*(((obj.geomParams.beamWidth + obj.chiP) - obj.xShearCenter) - obj.zEngine)];
         end
 
         function computeBeamSolver(obj)

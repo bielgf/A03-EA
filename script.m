@@ -87,21 +87,13 @@ data.fixedNodes = [ % node, direction, value
 
 %% OOP --------------------------------------------------------------------
 
-m = FEMBeamComputer(data);
-m.computeGeoDiscret();
+s = data; % NO!!
 
-% SECTION SOLVER ----------------------------------------------------------
-
-m.computeSectionSolver();
-
-m.computeBeamProp();
-m.computeForceMomentElem();
-
-% BEAM SOLVER -------------------------------------------------------------
-
-m.computeExternalForce();
-
-m.computeBeamSolver();
+s.geomParams.beamWidth = data.beamWidth;
+s.geomParams.h1        = data.h1;
+% ...
+m = FEMBeamComputer(s);
+m.compute();
 
 %% PLOTTING ---------------------------------------------------------------
 
@@ -171,8 +163,8 @@ m.computeBeamSolver();
 
 % B.2) Study of convergence
 
-stycnv = studyOfCnvg(data);
-stycnv.compute();
+% stycnv = studyOfCnvg(data);
+% stycnv.compute();
 
 
 
@@ -195,3 +187,5 @@ run(test3)
 
 test4 = reactionsTest(m.r);
 run(test4)
+
+close all;

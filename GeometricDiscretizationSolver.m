@@ -1,6 +1,9 @@
 classdef GeometricDiscretizationSolver < handle
 
     properties (Access = private)
+        geomParams
+
+        % delete:
         N1
         N2
         N3
@@ -16,7 +19,9 @@ classdef GeometricDiscretizationSolver < handle
         end
 
         function [xSection,materialSecConnec,nodalSecConnec] = compute(obj)
-            [xSection,materialSecConnec,nodalSecConnec] = GeometricDiscret(obj.N1,obj.N2,obj.N3,obj.beamWidth,obj.h1,obj.h2);
+            %N1 = obj.geomParams.N1;
+            %...
+            [xSection,materialSecConnec,nodalSecConnec] = GeometricDiscret(obj.N1,obj.N2,obj.N3,obj.beamWidth,obj.h1,obj.h2); % obj.N1 -> N1
         end
 
     end
