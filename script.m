@@ -102,6 +102,11 @@ s.geomParams.N2         = data.N2;
 s.geomParams.N3         = data.N3;
 s.geomParams.open       = data.open;
 
+s.connec.nodalConnec    = data.nodalConnec;
+s.connec.materialConnec = data.materialConnec;
+s.connec.dofsConnec     = data.dofsConnec;
+s.connec.fixedNodes     = data.fixedNodes;
+
 s.aeroParams.Cl     = data.Cl;
 s.aeroParams.rhoInf = data.rhoInf;
 s.aeroParams.vInf   = data.vInf;

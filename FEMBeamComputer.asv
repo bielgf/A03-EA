@@ -2,7 +2,6 @@ classdef FEMBeamComputer < handle
     
     % ToDo:
     %- Simplificar properties
-    %- Eliminar properties publiques que no fem servir
     %- Veure comentaris específics en el codi
 
     properties (Access = private)
@@ -13,7 +12,6 @@ classdef FEMBeamComputer < handle
         aeroParams
         
         materialProp
-        open
         xShearCenter
         xSecInertia
         J
@@ -30,13 +28,15 @@ classdef FEMBeamComputer < handle
         numNodesElem
         numElements
         totalDOFs
+
         nodalConnec
         materialConnec
         dofsConnec
+        fixedNodes
+
         forceElem
         momentElem
         externalForce
-        fixedNodes
         xEngine
         engineMass
         g
@@ -46,12 +46,6 @@ classdef FEMBeamComputer < handle
     end
 
     properties (Access = public)
-        sigma
-        normalStress
-        tau_s
-        s_shear
-        tau_t
-        s_tor
         K
         F
         u
@@ -79,7 +73,7 @@ classdef FEMBeamComputer < handle
         
         function init(obj,cParams)
             obj.geomParams     = cParams.geomParams;
-%             obj.connec         = cParams.connec;
+            obj.connec         = cParams.connec;
             obj.aeroParams     = cParams.aeroParams;
 
             obj.materialProp   = cParams.materialProp;
@@ -117,14 +111,14 @@ classdef FEMBeamComputer < handle
             s.nodalSecConnec    = obj.geomParams.nodalSecConnec;
             s.materialProp      = obj.materialProp;
             s.materialSecConnec = obj.geomParams.materialSecConnec;
-            s.open              = obj.open;
+            s.open              = obj.geomParams.open;
             s.xBendMoment       = obj.xBendMoment;
             s.yBendMoment       = obj.yBendMoment;
             s.zBendMoment       = obj.zBendMoment;
             s.xShearForce       = obj.xShearForce;
             s.yShearForce       = obj.yShearForce;
             sec                 = SectionSolver(s);
-            [obj.sigma,obj.normalStress,obj.tau_s,obj.s_shear,obj.tau_t,obj.s_tor,obj.xShearCenter,obj.xSecInertia,obj.J] = sec.compute();
+            [~,~,~,~,~,~,obj.xShearCenter,obj.xSecInertia,obj.J] = sec.compute();
         end
 
         function computeBeamProp(obj)
@@ -168,10 +162,10 @@ classdef FEMBeamComputer < handle
             bm.numDOFsNode    = obj.numDOFsNode;
             bm.numElements    = obj.numElements;
             bm.xGlobal        = obj.xGlobal;
-            bm.nodalConnec    = obj.nodalConnec;
-            bm.dofsConnec     = obj.dofsConnec;
+            bm.nodalConnec    = obj.connec.nodalConnec;
+            bm.dofsConnec     = obj.connedofsConnec;
             bm.beamProp       = obj.beamProp;
-            bm.materialConnec = obj.materialConnec;
+            bm.materialConnec = obj.connec.materialConnec;
             bm.fixedNodes     = obj.fixedNodes;
             bm.forceElem      = obj.forceElem;
             bm.momentElem     = obj.momentElem;
@@ -180,8 +174,6 @@ classdef FEMBeamComputer < handle
             beam              = BeamSolver(bm);
             [obj.K,obj.F,obj.u,obj.r] = beam.compute();
         end
-
-
 
     end
 

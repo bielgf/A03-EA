@@ -12,7 +12,6 @@ classdef FEMBeamComputer < handle
         aeroParams
         
         materialProp
-        open
         xShearCenter
         xSecInertia
         J
@@ -29,13 +28,10 @@ classdef FEMBeamComputer < handle
         numNodesElem
         numElements
         totalDOFs
-        nodalConnec
-        materialConnec
-        dofsConnec
+
         forceElem
         momentElem
         externalForce
-        fixedNodes
         xEngine
         engineMass
         g
@@ -72,7 +68,7 @@ classdef FEMBeamComputer < handle
         
         function init(obj,cParams)
             obj.geomParams     = cParams.geomParams;
-%             obj.connec         = cParams.connec;
+            obj.connec         = cParams.connec;
             obj.aeroParams     = cParams.aeroParams;
 
             obj.materialProp   = cParams.materialProp;
@@ -87,10 +83,6 @@ classdef FEMBeamComputer < handle
             obj.numNodesElem   = cParams.numNodesElem;
             obj.numElements    = cParams.numElements;
             obj.lambda         = cParams.lambda;
-            obj.nodalConnec    = cParams.nodalConnec;
-            obj.materialConnec = cParams.materialConnec;
-            obj.dofsConnec     = cParams.dofsConnec;
-            obj.fixedNodes     = cParams.fixedNodes;
             obj.xEngine        = cParams.xEngine;
             obj.engineMass     = cParams.engineMass;
             obj.zEngine        = cParams.zEngine;
@@ -110,7 +102,7 @@ classdef FEMBeamComputer < handle
             s.nodalSecConnec    = obj.geomParams.nodalSecConnec;
             s.materialProp      = obj.materialProp;
             s.materialSecConnec = obj.geomParams.materialSecConnec;
-            s.open              = obj.open;
+            s.open              = obj.geomParams.open;
             s.xBendMoment       = obj.xBendMoment;
             s.yBendMoment       = obj.yBendMoment;
             s.zBendMoment       = obj.zBendMoment;
@@ -161,11 +153,11 @@ classdef FEMBeamComputer < handle
             bm.numDOFsNode    = obj.numDOFsNode;
             bm.numElements    = obj.numElements;
             bm.xGlobal        = obj.xGlobal;
-            bm.nodalConnec    = obj.nodalConnec;
-            bm.dofsConnec     = obj.dofsConnec;
+            bm.nodalConnec    = obj.connec.nodalConnec;
+            bm.dofsConnec     = obj.connec.dofsConnec;
+            bm.materialConnec = obj.connec.materialConnec;
+            bm.fixedNodes     = obj.connec.fixedNodes;
             bm.beamProp       = obj.beamProp;
-            bm.materialConnec = obj.materialConnec;
-            bm.fixedNodes     = obj.fixedNodes;
             bm.forceElem      = obj.forceElem;
             bm.momentElem     = obj.momentElem;
             bm.externalForce  = obj.externalForce;
@@ -173,8 +165,6 @@ classdef FEMBeamComputer < handle
             beam              = BeamSolver(bm);
             [obj.K,obj.F,obj.u,obj.r] = beam.compute();
         end
-
-
 
     end
 
