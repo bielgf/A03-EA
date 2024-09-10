@@ -89,28 +89,45 @@ data.fixedNodes = [ % node, direction, value
 
 s = data; % NO!!
 
-s.geomParams.beamWidth  = data.beamWidth;
-s.geomParams.chord      = data.chord;
-s.geomParams.wingspan   = data.wingspan;
-s.geomParams.chiP       = data.chiP;
-s.geomParams.aeroCenter = data.aeroCenter;
-s.geomParams.gravCenter = data.gravCenter;
-s.geomParams.h1         = data.h1;
-s.geomParams.h2         = data.h2;
-s.geomParams.N1         = data.N1;
-s.geomParams.N2         = data.N2;
-s.geomParams.N3         = data.N3;
-s.geomParams.open       = data.open;
+s.geomParams.E            = data.E;
+s.geomParams.G            = data.G;
+s.geomParams.beamWidth    = data.beamWidth;
+s.geomParams.chord        = data.chord;
+s.geomParams.wingspan     = data.wingspan;
+s.geomParams.chiP         = data.chiP;
+s.geomParams.aeroCenter   = data.aeroCenter;
+s.geomParams.gravCenter   = data.gravCenter;
+s.geomParams.h1           = data.h1;
+s.geomParams.h2           = data.h2;
+s.geomParams.N1           = data.N1;
+s.geomParams.N2           = data.N2;
+s.geomParams.N3           = data.N3;
+s.geomParams.materialProp = data.materialProp;
+s.geomParams.open         = data.open;
+
+s.beamParams.numElements  = data.numElements;
+s.beamParams.numNodesElem = data.numNodesElem;
+s.beamParams.numDOFsNode  = data.numDOFsNode;
+s.beamParams.lambda       = data.lambda;
+s.beamParams.engineMass   = data.engineMass;
+s.beamParams.xEngine      = data.xEngine;
+s.beamParams.zEngine      = data.zEngine;
+
+s.aeroParams.Cl     = data.Cl;
+s.aeroParams.rhoInf = data.rhoInf;
+s.aeroParams.vInf   = data.vInf;
+s.aeroParams.g      = data.g;
 
 s.connec.nodalConnec    = data.nodalConnec;
 s.connec.materialConnec = data.materialConnec;
 s.connec.dofsConnec     = data.dofsConnec;
 s.connec.fixedNodes     = data.fixedNodes;
 
-s.aeroParams.Cl     = data.Cl;
-s.aeroParams.rhoInf = data.rhoInf;
-s.aeroParams.vInf   = data.vInf;
-s.aeroParams.g      = data.g;
+s.secStress.xBendMoment = data.xBendMoment;
+s.secStress.yBendMoment = data.yBendMoment;
+s.secStress.zBendMoment = data.zBendMoment;
+s.secStress.xShearForce = data.xShearForce;
+s.secStress.yShearForce = data.yShearForce;
 
 
 m = FEMBeamComputer(s);

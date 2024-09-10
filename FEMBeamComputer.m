@@ -6,38 +6,22 @@ classdef FEMBeamComputer < handle
 
     properties (Access = private)
         geomParams
-
-        connec
-
+        beamParams
         aeroParams
-        
-        materialProp
+        connec
+        secStress
+    end
+
+    properties (Access = private)
         xShearCenter
         xSecInertia
         J
-        xBendMoment
-        yBendMoment
-        zBendMoment
-        xShearForce
-        yShearForce
         beamProp
-        E
-        G
         xGlobal
-        numDOFsNode
-        numNodesElem
-        numElements
         totalDOFs
-
         forceElem
         momentElem
         externalForce
-        xEngine
-        engineMass
-        g
-        zEngine
-
-        lambda
     end
 
     properties (Access = public)
@@ -68,24 +52,10 @@ classdef FEMBeamComputer < handle
         
         function init(obj,cParams)
             obj.geomParams     = cParams.geomParams;
-            obj.connec         = cParams.connec;
+            obj.beamParams     = cParams.beamParams;
             obj.aeroParams     = cParams.aeroParams;
-
-            obj.materialProp   = cParams.materialProp;
-            obj.xBendMoment    = cParams.xBendMoment;
-            obj.yBendMoment    = cParams.yBendMoment;
-            obj.zBendMoment    = cParams.zBendMoment;
-            obj.xShearForce    = cParams.xShearForce;
-            obj.yShearForce    = cParams.yShearForce;
-            obj.E              = cParams.E;
-            obj.G              = cParams.G;
-            obj.numDOFsNode    = cParams.numDOFsNode;
-            obj.numNodesElem   = cParams.numNodesElem;
-            obj.numElements    = cParams.numElements;
-            obj.lambda         = cParams.lambda;
-            obj.xEngine        = cParams.xEngine;
-            obj.engineMass     = cParams.engineMass;
-            obj.zEngine        = cParams.zEngine;
+            obj.connec         = cParams.connec;
+            obj.secStress      = cParams.secStress;
         end
 
         function computeGeoDiscret(obj)
@@ -100,31 +70,31 @@ classdef FEMBeamComputer < handle
         function computeSectionSolver(obj)
             s.xSection          = obj.geomParams.xSection;
             s.nodalSecConnec    = obj.geomParams.nodalSecConnec;
-            s.materialProp      = obj.materialProp;
+            s.materialProp      = obj.geomParams.materialProp;
             s.materialSecConnec = obj.geomParams.materialSecConnec;
             s.open              = obj.geomParams.open;
-            s.xBendMoment       = obj.xBendMoment;
-            s.yBendMoment       = obj.yBendMoment;
-            s.zBendMoment       = obj.zBendMoment;
-            s.xShearForce       = obj.xShearForce;
-            s.yShearForce       = obj.yShearForce;
+            s.xBendMoment       = obj.secStress.xBendMoment;
+            s.yBendMoment       = obj.secStress.yBendMoment;
+            s.zBendMoment       = obj.secStress.zBendMoment;
+            s.xShearForce       = obj.secStress.xShearForce;
+            s.yShearForce       = obj.secStress.yShearForce;
             sec                 = SectionSolver(s);
             [~,~,~,~,~,~,obj.xShearCenter,obj.xSecInertia,obj.J] = sec.compute();
         end
 
         function computeBeamProp(obj)
-            obj.beamProp = [obj.E   obj.G   obj.xSecInertia  obj.J];
+            obj.beamProp = [obj.geomParams.E   obj.geomParams.G   obj.xSecInertia  obj.J];
         end
 
         function computeForceMomentElem(obj)
-            fm.numDOFsNode  = obj.numDOFsNode;
-            fm.numElements  = obj.numElements;
+            fm.numDOFsNode  = obj.beamParams.numDOFsNode;
+            fm.numElements  = obj.beamParams.numElements;
             fm.wingspan     = obj.geomParams.wingspan;
             fm.rhoInf       = obj.aeroParams.rhoInf;
             fm.vInf         = obj.aeroParams.vInf;
             fm.chord        = obj.geomParams.chord;
             fm.Cl           = obj.aeroParams.Cl;
-            fm.lambda       = obj.lambda;
+            fm.lambda       = obj.beamParams.lambda;
             fm.g            = obj.aeroParams.g;
             fm.beamWidth    = obj.geomParams.beamWidth;
             fm.chiP         = obj.geomParams.chiP;
@@ -137,21 +107,22 @@ classdef FEMBeamComputer < handle
 
         function computeExternalForce(obj)
             xG = obj.xGlobal;
-            xE = obj.xEngine;
+            xE = obj.beamParams.xEngine;
+            eM = obj.beamParams.engineMass;
             % ...
             F11 = find(xG == xE);
             F21 = F11;
             % ...
-            obj.externalForce = [F11, 1, -obj.engineMass*obj.aeroParams.g;
-                                 F21, 3, -obj.engineMass*obj.aeroParams.g*(((obj.geomParams.beamWidth + obj.geomParams.chiP) - obj.xShearCenter) - obj.zEngine)];
+            obj.externalForce = [F11, 1, -eM*obj.aeroParams.g;
+                                 F21, 3, -eM*obj.aeroParams.g*(((obj.geomParams.beamWidth + obj.geomParams.chiP) - obj.xShearCenter) - obj.beamParams.zEngine)];
 
             % Create a class for external force
         end
 
         function computeBeamSolver(obj)
-            bm.numNodesElem   = obj.numNodesElem;
-            bm.numDOFsNode    = obj.numDOFsNode;
-            bm.numElements    = obj.numElements;
+            bm.numNodesElem   = obj.beamParams.numNodesElem;
+            bm.numDOFsNode    = obj.beamParams.numDOFsNode;
+            bm.numElements    = obj.beamParams.numElements;
             bm.xGlobal        = obj.xGlobal;
             bm.nodalConnec    = obj.connec.nodalConnec;
             bm.dofsConnec     = obj.connec.dofsConnec;
