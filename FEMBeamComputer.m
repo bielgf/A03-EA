@@ -1,8 +1,4 @@
 classdef FEMBeamComputer < handle
-    
-    % ToDo:
-    %- Simplificar properties
-    %- Veure comentaris específics en el codi
 
     properties (Access = private)
         geomParams
@@ -13,14 +9,7 @@ classdef FEMBeamComputer < handle
     end
 
     properties (Access = private)
-        xShearCenter
-        xSecInertia
-        J
         beamProp
-        xGlobal
-        totalDOFs
-        forceElem
-        momentElem
         externalForce
     end
 
@@ -62,9 +51,9 @@ classdef FEMBeamComputer < handle
             gd = obj.geomParams;
             geoDiscret   = GeometricDiscretizationSolver(gd);
             [xSection,materialSecConnec,nodalSecConnec] = geoDiscret.compute();
-            obj.geomParams.xSection = xSection;
+            obj.geomParams.xSection          = xSection;
             obj.geomParams.materialSecConnec = materialSecConnec;
-            obj.geomParams.nodalSecConnec = nodalSecConnec;
+            obj.geomParams.nodalSecConnec    = nodalSecConnec;
         end
 
         function computeSectionSolver(obj)
@@ -79,11 +68,18 @@ classdef FEMBeamComputer < handle
             s.xShearForce       = obj.secStress.xShearForce;
             s.yShearForce       = obj.secStress.yShearForce;
             sec                 = SectionSolver(s);
-            [~,~,~,~,~,~,obj.xShearCenter,obj.xSecInertia,obj.J] = sec.compute();
+            [~,~,~,~,~,~,xShearCenter,xSecInertia,J] = sec.compute();
+            obj.geomParams.xShearCenter = xShearCenter;
+            obj.geomParams.xSecInertia = xSecInertia;
+            obj.geomParams.J            = J;
         end
 
         function computeBeamProp(obj)
-            obj.beamProp = [obj.geomParams.E   obj.geomParams.G   obj.xSecInertia  obj.J];
+            E   = obj.geomParams.E;
+            G   = obj.geomParams.G;
+            Ixx = obj.geomParams.xSecInertia;
+            J   = obj.geomParams.J;
+            obj.beamProp = [E   G   Ixx    J];
         end
 
         function computeForceMomentElem(obj)
@@ -100,39 +96,38 @@ classdef FEMBeamComputer < handle
             fm.chiP         = obj.geomParams.chiP;
             fm.aeroCenter   = obj.geomParams.aeroCenter;
             fm.gravCenter   = obj.geomParams.gravCenter;
-            fm.xShearCenter = obj.xShearCenter;
+            fm.xShearCenter = obj.geomParams.xShearCenter;
             forceMomentElem = ForceMomentElemCompute(fm);
-            [obj.xGlobal,obj.forceElem,obj.momentElem,obj.totalDOFs] = forceMomentElem.compute();
+            [xGlobal,forceElem,momentElem,totalDOFs] = forceMomentElem.compute();
+            obj.beamParams.xGlobal    = xGlobal;
+            obj.beamParams.forceElem  = forceElem;
+            obj.beamParams.momentElem = momentElem;
+            obj.beamParams.totalDOFs  = totalDOFs;
         end
 
         function computeExternalForce(obj)
-            xG = obj.xGlobal;
-            xE = obj.beamParams.xEngine;
-            eM = obj.beamParams.engineMass;
-            % ...
-            F11 = find(xG == xE);
-            F21 = F11;
-            % ...
-            obj.externalForce = [F11, 1, -eM*obj.aeroParams.g;
-                                 F21, 3, -eM*obj.aeroParams.g*(((obj.geomParams.beamWidth + obj.geomParams.chiP) - obj.xShearCenter) - obj.beamParams.zEngine)];
-
-            % Create a class for external force
+            ef.geomParams = obj.geomParams;
+            ef.aeroParams = obj.aeroParams;
+            ef.beamParams = obj.beamParams;
+            efAssembly = ExternalForceAssembly(ef);
+            efAssembly.assembly();
+            obj.externalForce = efAssembly.externalForce;
         end
 
         function computeBeamSolver(obj)
             bm.numNodesElem   = obj.beamParams.numNodesElem;
             bm.numDOFsNode    = obj.beamParams.numDOFsNode;
             bm.numElements    = obj.beamParams.numElements;
-            bm.xGlobal        = obj.xGlobal;
+            bm.xGlobal        = obj.beamParams.xGlobal;
             bm.nodalConnec    = obj.connec.nodalConnec;
             bm.dofsConnec     = obj.connec.dofsConnec;
             bm.materialConnec = obj.connec.materialConnec;
             bm.fixedNodes     = obj.connec.fixedNodes;
             bm.beamProp       = obj.beamProp;
-            bm.forceElem      = obj.forceElem;
-            bm.momentElem     = obj.momentElem;
+            bm.forceElem      = obj.beamParams.forceElem;
+            bm.momentElem     = obj.beamParams.momentElem;
             bm.externalForce  = obj.externalForce;
-            bm.totalDOFs      = obj.totalDOFs;
+            bm.totalDOFs      = obj.beamParams.totalDOFs;
             beam              = BeamSolver(bm);
             [obj.K,obj.F,obj.u,obj.r] = beam.compute();
         end
