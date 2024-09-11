@@ -46,13 +46,6 @@ end
 
 % A.1) A.2) Open section
 
-% Input values for analysis
-data.xBendMoment = -1;
-data.yBendMoment = 0;
-data.zBendMoment = 1;
-data.xShearForce = 0;
-data.yShearForce = 1;
-
 % Material properties matrix
 data.materialProp = [ % Thickness
                     data.t2
@@ -87,8 +80,6 @@ data.fixedNodes = [ % node, direction, value
 
 %% OOP --------------------------------------------------------------------
 
-s = data; % NO!!
-
 s.geomParams.E            = data.E;
 s.geomParams.G            = data.G;
 s.geomParams.beamWidth    = data.beamWidth;
@@ -122,12 +113,6 @@ s.connec.nodalConnec    = data.nodalConnec;
 s.connec.materialConnec = data.materialConnec;
 s.connec.dofsConnec     = data.dofsConnec;
 s.connec.fixedNodes     = data.fixedNodes;
-
-s.secStress.xBendMoment = data.xBendMoment;
-s.secStress.yBendMoment = data.yBendMoment;
-s.secStress.zBendMoment = data.zBendMoment;
-s.secStress.xShearForce = data.xShearForce;
-s.secStress.yShearForce = data.yShearForce;
 
 
 m = FEMBeamComputer(s);
