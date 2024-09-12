@@ -3,18 +3,9 @@ classdef ForceMomentElemCompute < handle
     properties (Access = private)
         numDOFsNode
         numElements
-        wingspan
-        rhoInf
-        vInf
-        chord
-        Cl
+        geoP
+        aeroParams
         lambda
-        g
-        beamWidth
-        chiP
-        aeroCenter
-        gravCenter
-        xShearCenter
     end
 
     methods (Access = public)
@@ -24,8 +15,11 @@ classdef ForceMomentElemCompute < handle
         end
 
         function [xGlobal,forceElem,momentElem,totalDOFs] = compute(obj)
-            %nElem = obj.numElements;
-            [xGlobal,forceElem,momentElem] = GetForceMomentElement(obj.numElements,obj.wingspan,obj.rhoInf,obj.vInf,obj.chord,obj.Cl,obj.lambda,obj.g,obj.beamWidth,obj.chiP,obj.aeroCenter,obj.gravCenter,obj.xShearCenter);
+            nElem = obj.numElements;
+            geomP = obj.geoP;
+            aeroP = obj.aeroParams;
+            l     = obj.lambda;
+            [xGlobal,forceElem,momentElem] = GetForceMomentElement(nElem,aeroP,l,geomP);
             nnod = size(xGlobal,2);
             totalDOFs = nnod*obj.numDOFsNode;
         end
@@ -37,18 +31,9 @@ classdef ForceMomentElemCompute < handle
         function init(obj,cParams)
             obj.numDOFsNode  = cParams.numDOFsNode;
             obj.numElements  = cParams.numElements;
-            obj.wingspan     = cParams.wingspan;
-            obj.rhoInf       = cParams.rhoInf;
-            obj.vInf         = cParams.vInf;
-            obj.chord        = cParams.chord;
-            obj.Cl           = cParams.Cl;
+            obj.geoP         = cParams.geoP;
+            obj.aeroParams   = cParams.aeroParams;
             obj.lambda       = cParams.lambda;
-            obj.g            = cParams.g;
-            obj.beamWidth    = cParams.beamWidth;
-            obj.chiP         = cParams.chiP;
-            obj.aeroCenter   = cParams.aeroCenter;
-            obj.gravCenter   = cParams.gravCenter;
-            obj.xShearCenter = cParams.xShearCenter;
         end
 
     end

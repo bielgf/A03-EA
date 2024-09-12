@@ -55,9 +55,9 @@ classdef FEMBeamComputer < handle
             s   = obj.geomParams;
             sec = SectionSolver(s);
             [xShearCenter,xSecInertia,J] = sec.compute();
-            obj.geomParams.xShearCenter = xShearCenter;
-            obj.geomParams.xSecInertia  = xSecInertia;
-            obj.geomParams.J            = J;
+            obj.geomParams.xShearCenter  = xShearCenter;
+            obj.geomParams.xSecInertia   = xSecInertia;
+            obj.geomParams.J             = J;
         end
 
         function computeBeamProp(obj)
@@ -68,20 +68,15 @@ classdef FEMBeamComputer < handle
             obj.beamProp = [E   G   Ixx    J];
         end
 
-        % -----------------------------------------------
-
         function computeForceMomentElem(obj)
-            fm.beamWidth    = obj.geomParams.beamWidth;
-            fm.chiP         = obj.geomParams.chiP;
-            fm.aeroCenter   = obj.geomParams.aeroCenter;
-            fm.gravCenter   = obj.geomParams.gravCenter;
-            fm.xShearCenter = obj.geomParams.xShearCenter;
-            fm.wingspan     = obj.geomParams.wingspan;
-            fm.chord        = obj.geomParams.chord;
-            fm.rhoInf       = obj.aeroParams.rhoInf;
-            fm.vInf         = obj.aeroParams.vInf;            
-            fm.Cl           = obj.aeroParams.Cl;
-            fm.g            = obj.aeroParams.g;
+            fm.geoP.beamWidth    = obj.geomParams.beamWidth;
+            fm.geoP.chiP         = obj.geomParams.chiP;
+            fm.geoP.aeroCenter   = obj.geomParams.aeroCenter;
+            fm.geoP.gravCenter   = obj.geomParams.gravCenter;
+            fm.geoP.xShearCenter = obj.geomParams.xShearCenter;
+            fm.geoP.wingspan     = obj.geomParams.wingspan;
+            fm.geoP.chord        = obj.geomParams.chord;
+            fm.aeroParams   = obj.aeroParams;
             fm.lambda       = obj.beamParams.lambda;
             fm.numDOFsNode  = obj.beamParams.numDOFsNode;
             fm.numElements  = obj.beamParams.numElements;
@@ -101,6 +96,8 @@ classdef FEMBeamComputer < handle
             efAssembly.assembly();
             obj.externalForce = efAssembly.externalForce;
         end
+
+        % -----------------------------------------------
 
         function computeBeamSolver(obj)
             bm.numNodesElem   = obj.beamParams.numNodesElem;

@@ -29,7 +29,6 @@ classdef BeamSolver < handle
             [up,vp] = applyBC(obj.numDOFsNode,obj.fixedNodes); % passar a class
             [F] = pointLoads(obj.numDOFsNode,F,obj.externalForce); % passar a class
             [u,r] = solveSystem(obj.totalDOFs,K,F,up,vp);
-            [xel,Sel,Mbel,Mtel] = internalforcesFunction(obj.numElements,obj.numDOFsNode,obj.numNodesElem,obj.xGlobal',obj.nodalConnec,obj.dofsConnec,Kel,u); % passar a class
         end
 
     end

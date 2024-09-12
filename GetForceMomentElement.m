@@ -1,5 +1,18 @@
-function [xnod,fe,me] = GetForceMomentElement(nel,b,rhoinf,vinf,c,cl,lambda,g,d,xi_p,za,zm,xsp)
+function [xnod,fe,me] = GetForceMomentElement(nel,aeroP,lambda,geomP)
     
+    rhoinf = aeroP.rhoInf;
+    vinf   = aeroP.vInf;
+    cl     = aeroP.Cl;
+    g      = aeroP.g;
+    
+    b    = geomP.wingspan;
+    c    = geomP.chord;
+    d    = geomP.beamWidth;
+    xi_p = geomP.chiP;
+    za   = geomP.aeroCenter;
+    zm   = geomP.gravCenter;
+    xsp  = geomP.xShearCenter;
+
     % Geometric validation
     if mod(nel,4) ~= 0
         fprintf('Invalid number of elements for beam''s geometric discretization\n')
