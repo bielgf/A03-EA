@@ -23,6 +23,7 @@ classdef BeamSolver < handle
         end
 
         function [K,F,u,r] = compute(obj)
+            % StiffnessFunctionClass
             [Kel] = stiffnessFunction(obj.numNodesElem,obj.numDOFsNode,obj.numElements,obj.xGlobal',obj.nodalConnec,obj.beamProp,obj.materialConnec); % passar a class
             [fel] = forceFunction(obj.numNodesElem,obj.numDOFsNode,obj.numElements,obj.xGlobal',obj.nodalConnec,obj.forceElem,obj.momentElem); % passar a class
             [K,F] = assemblyFunction(obj.totalDOFs,obj.numElements,obj.numNodesElem,obj.numDOFsNode,obj.dofsConnec,Kel,fel); % passar a class

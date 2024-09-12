@@ -76,10 +76,10 @@ classdef FEMBeamComputer < handle
             fm.geoP.xShearCenter = obj.geomParams.xShearCenter;
             fm.geoP.wingspan     = obj.geomParams.wingspan;
             fm.geoP.chord        = obj.geomParams.chord;
-            fm.aeroParams   = obj.aeroParams;
-            fm.lambda       = obj.beamParams.lambda;
-            fm.numDOFsNode  = obj.beamParams.numDOFsNode;
-            fm.numElements  = obj.beamParams.numElements;
+            fm.aeroParams        = obj.aeroParams;
+            fm.lambda            = obj.beamParams.lambda;
+            fm.numDOFsNode       = obj.beamParams.numDOFsNode;
+            fm.numElements       = obj.beamParams.numElements;
             forceMomentElem = ForceMomentElemCompute(fm);
             [xGlobal,forceElem,momentElem,totalDOFs] = forceMomentElem.compute();
             obj.beamParams.xGlobal    = xGlobal;

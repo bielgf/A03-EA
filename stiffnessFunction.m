@@ -8,14 +8,12 @@ function Kel = stiffnessFunction(nne,ni,nel,x,Tn,m,Tm)
         I = m(Tm(ei),3);
         J = m(Tm(ei),4);
         
-        K_b = (E*I)/(le^3)*[                            % Stiffness matrix for bending
-                            12      6*le    0   -12     6*le    0
-                            6*le    4*le^2  0   -6*le   2*le^2  0
-                            0       0       0   0       0       0           
-                            -12     -6*le   0   12      -6*le   0
-                            6*le    2*le^2  0   -6*le   4*le^2  0
-                            0       0       0   0       0       0
-                            ];
+        b.E  = E;
+        b.I  = I;
+        b.le = le;
+        BendMatrix = BendingStiffMatrixAssembly(b);
+        BendMatrix.assembleMatrix();
+        K_b = BendMatrix.Kb;
     
         K_t = (G*J)/(le)*[                              % Stiffness matrix for torsion
                             0   0   0   0   0   0

@@ -10,10 +10,15 @@ classdef StiffnessFunctionClass < handle
         materialConnec
     end
 
+    properties (Access = public)
+        Kel
+    end
+
     methods (Access = public)
         
         function obj = StiffnessFunctionClass(cParams)
             obj.init(cParams);
+            obj.compute();
         end
 
     end
@@ -28,6 +33,10 @@ classdef StiffnessFunctionClass < handle
             obj.nodalConnec    = cParams.nodalConnec;
             obj.beamProp       = cParams.beamProp;
             obj.materialConnec = cParams.materialConnec;
+        end
+
+        function compute(obj)
+            obj.Kel = stiffnessFunction(obj.numNodesElem,obj.numDOFsNode,obj.numElements,obj.xGlobal,obj.nodalConnec,obj.beamProp,obj.materialConnec);
         end
 
     end
