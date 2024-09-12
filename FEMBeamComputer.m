@@ -100,6 +100,9 @@ classdef FEMBeamComputer < handle
         % -----------------------------------------------
 
         function computeBeamSolver(obj)
+            bm.beamParams    = obj.beamParams;
+            bm.connec        = obj.connec;
+
             bm.numNodesElem   = obj.beamParams.numNodesElem;
             bm.numDOFsNode    = obj.beamParams.numDOFsNode;
             bm.numElements    = obj.beamParams.numElements;

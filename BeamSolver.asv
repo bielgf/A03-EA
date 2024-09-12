@@ -59,7 +59,7 @@ classdef BeamSolver < handle
             obj.numElements = cParams.numElements;
             obj.xGlobal = cParams.xGlobal;
             obj.nodalConnec = cParams.nodalConnec;
-            obj.dofsConnec = cParams.dofsConnec;
+            obj.do
             obj.forceElem = cParams.forceElem;
             obj.momentElem = cParams.momentElem;
             obj.totalDOFs = cParams.totalDOFs;

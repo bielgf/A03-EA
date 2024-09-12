@@ -1,13 +1,9 @@
 classdef StiffnessFunctionClass < handle
     
     properties (Access = private)
-        numNodesElem
-        numDOFsNode
-        numElements
-        xGlobal
-        nodalConnec
+        beamParams
+        connec
         beamProp
-        materialConnec
     end
 
     properties (Access = public)
@@ -18,6 +14,9 @@ classdef StiffnessFunctionClass < handle
         
         function obj = StiffnessFunctionClass(cParams)
             obj.init(cParams);
+        end
+
+        function computeStiffnessMatrix(obj)
             obj.compute();
         end
 
@@ -26,17 +25,40 @@ classdef StiffnessFunctionClass < handle
     methods (Access = private)
 
         function init(obj,cParams)
-            obj.numNodesElem   = cParams.numNodesElem;
-            obj.numDOFsNode    = cParams.numDOFsNode;
-            obj.numElements    = cParams.numElements;
-            obj.xGlobal        = cParams.xGlobal';
-            obj.nodalConnec    = cParams.nodalConnec;
-            obj.beamProp       = cParams.beamProp;
-            obj.materialConnec = cParams.materialConnec;
+            obj.beamParams = cParams.beamP;
+            obj.connec     = cParams.con;
+            obj.beamProp   = cParams.beamPr;
         end
 
         function compute(obj)
-            obj.Kel = stiffnessFunction(obj.numNodesElem,obj.numDOFsNode,obj.numElements,obj.xGlobal,obj.nodalConnec,obj.beamProp,obj.materialConnec);
+            nne = obj.beamParams.numNodesElem;
+            ni  = obj.beamParams.numDOFsNode;
+            nel = obj.beamParams.numElements;
+            x   = obj.beamParams.xGlobal';
+            nC  = obj.connec.nodalConnec;
+            mC  = obj.connec.materialConnec;
+            bP  = obj.beamProp;
+
+            obj.Kel = zeros(nne*ni,nne*ni,nel);
+            for ei = 1:nel
+                b.le = abs(x(nC(ei,2),1) - x(nC(ei,1),1));
+            
+                b.E = bP(mC(ei),1);
+                b.G = bP(mC(ei),2);
+                b.I = bP(mC(ei),3);
+                b.J = bP(mC(ei),4);
+        
+                BendMatrix = BendingStiffMatrixAssembly(b);
+                BendMatrix.assembleMatrix();
+                Kb = BendMatrix.Kb;
+            
+                TorMatrix = TorsionStiffMatrixAssembly(b);
+                TorMatrix.assembleMatrix();
+                Kt = TorMatrix.Kt;
+            
+                K = Kb + Kt;
+                obj.Kel(:,:,ei) = K;
+            end
         end
 
     end
