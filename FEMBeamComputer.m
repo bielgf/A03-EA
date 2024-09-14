@@ -97,24 +97,9 @@ classdef FEMBeamComputer < handle
             obj.externalForce = efAssembly.externalForce;
         end
 
-        % -----------------------------------------------
-
         function computeBeamSolver(obj)
             bm.beamParams    = obj.beamParams;
             bm.connec        = obj.connec;
-
-            bm.numNodesElem   = obj.beamParams.numNodesElem;
-            bm.numDOFsNode    = obj.beamParams.numDOFsNode;
-            bm.numElements    = obj.beamParams.numElements;
-            bm.xGlobal        = obj.beamParams.xGlobal;
-            bm.forceElem      = obj.beamParams.forceElem;
-            bm.momentElem     = obj.beamParams.momentElem;
-            bm.totalDOFs      = obj.beamParams.totalDOFs;
-            bm.nodalConnec    = obj.connec.nodalConnec;
-            bm.dofsConnec     = obj.connec.dofsConnec;
-            bm.materialConnec = obj.connec.materialConnec;
-            bm.fixedNodes     = obj.connec.fixedNodes;
-            
             bm.externalForce  = obj.externalForce;
             bm.beamProp       = obj.beamProp;
             beam              = BeamSolver(bm);

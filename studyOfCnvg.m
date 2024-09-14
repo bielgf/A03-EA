@@ -24,38 +24,33 @@ classdef studyOfCnvg < handle
 
         function computeStudy(obj)
             
-            el_conv = [4 8 16 32 64 128 256 512];
-            u_conv = zeros(3,size(el_conv,2));
+            elConv = [4 8 16 32 64 128 256 512];
+            uConv = zeros(3,size(elConv,2));
 
-            for nel = 1:size(el_conv,2)
-                obj.data.numElements = el_conv(1,nel);
+            for nel = 1:size(elConv,2)
+                obj.data.numElements = elConv(1,nel);
                 obj.data.nodalConnec = [1:obj.data.numElements ; 2:obj.data.numElements+1]';
                 obj.data.materialConnec = ones(obj.data.numElements,1);
                 obj.data.dofsConnec = connectDOF(obj.data.numElements,obj.data.numDOFsNode,obj.data.nodalConnec);
                 
                 m = FEMBeamComputer(obj.data);
-                m.computeGeoDiscret();
-                m.computeSectionSolver();
-                m.computeBeamProp();
-                m.computeForceMomentElem();
-                m.computeExternalForce();
-                m.computeBeamSolver();
+                m.compute();
                 
-                u_conv(:,nel) = m.u(end-2:end);
+                uConv(:,nel) = m.u(end-2:end);
             end
 
-            error_uy = zeros(1,size(u_conv,2)-1);
-            error_rotx = zeros(1,size(u_conv,2)-1);
-            error_rotz = zeros(1,size(u_conv,2)-1);
+            error_uy = zeros(1,size(uConv,2)-1);
+            error_rotx = zeros(1,size(uConv,2)-1);
+            error_rotz = zeros(1,size(uConv,2)-1);
         
-            for ii = 1:size(u_conv,2)-1
-                error_uy(1,ii) = abs((u_conv(1,ii) - u_conv(1,end))/(u_conv(1,end)))*100;
-                error_rotx(1,ii) = abs((u_conv(2,ii) - u_conv(2,end))/(u_conv(2,end)))*100;
-                error_rotz(1,ii) = abs((u_conv(3,ii) - u_conv(3,end))/(u_conv(3,end)))*100;
+            for ii = 1:size(uConv,2)-1
+                error_uy(1,ii) = abs((uConv(1,ii) - uConv(1,end))/(uConv(1,end)))*100;
+                error_rotx(1,ii) = abs((uConv(2,ii) - uConv(2,end))/(uConv(2,end)))*100;
+                error_rotz(1,ii) = abs((uConv(3,ii) - uConv(3,end))/(uConv(3,end)))*100;
             end
             
             figure(12)
-            semilogx(el_conv(1:end-1),error_uy,el_conv(1:end-1),error_rotx,el_conv(1:end-1),error_rotz)
+            semilogx(elConv(1:end-1),error_uy,elConv(1:end-1),error_rotx,elConv(1:end-1),error_rotz)
             legend('error in u_y','error in rot_x','error in rot_z')
             grid on
             xlabel('Beam''s number of elements' )

@@ -38,12 +38,6 @@ data.N2 = 400;                  % Number of elements of the second section
 data.N3 = 200;                  % Number of elements of the third section
 data.open = 1;
 
-if data.open == 0
-    section = 'closed';
-else
-    section = 'open';
-end
-
 % A.1) A.2) Open section
 
 % Material properties matrix
@@ -117,84 +111,6 @@ s.connec.fixedNodes     = data.fixedNodes;
 
 m = FEMBeamComputer(s);
 m.compute();
-
-%% PLOTTING ---------------------------------------------------------------
-
-% figure(1)
-% plot(m.s_norm(1,:),m.sigma(1,:))
-% xlabel('Node position, s [m]')
-% ylabel('Normal stress, σ [Pa]')
-% title(sprintf('Normal stress distribution on the %s section (Mx unitary)',section))
-% grid on 
-% 
-% figure(2)
-% plot(m.s_shear(1,:),m.tau_s(1,:))
-% xlabel('Node position, s [m]')
-% ylabel('Tangetial stress, τ [Pa]')
-% title(sprintf('Tangential stress distribution due to shear on the %s section (Sy unitary)',section))
-% grid on 
-% 
-% figure(3)
-% plot(m.s_tor(1,:),m.tau_t(1,:))
-% xlabel('Node position, s [m]')
-% ylabel('Tangetial stress, τ [Pa]')
-% title(sprintf('Tangential stress distribution due to torsion on the %s section (Mz unitary)',section))
-% grid on
-% 
-% figure(6)
-% plot(xnod,u(1:3:end-2))
-% title(sprintf('Vertical Deflection for %s section',section))
-% grid on
-% xlabel('x (m)')
-% ylabel('Vertical Deflection (m)')
-% 
-% figure(7)
-% plot(xnod,u(2:3:end-1))
-% title(sprintf('Section Bending Rotation for %s section',section))
-% grid on
-% xlabel('x (m)')
-% ylabel('Section Bending Rotation (rad)')
-% 
-% figure(8)
-% plot(xnod,u(3:3:end))
-% title(sprintf('Section Torsion Rotation for %s section',section))
-% grid on
-% xlabel('x (m)')
-% ylabel('Section Torsion Rotation (rad)')
-%  
-% figure(9)
-% plot(xel,Sel)
-% title(sprintf('Shear Force for %s section',section))
-% grid on
-% xlabel('x (m)')
-% ylabel('Shear Force (N)')
-%  
-% figure(10)
-% plot(xel,Mbel)
-% title(sprintf('Bending Moment for %s section',section))
-% grid on
-% xlabel('x (m)')
-% ylabel('Bending Moment (N*m)')
-% 
-% figure(11)
-% plot(xel,Mtel)
-% title(sprintf('Torsion Moment for %s section',section))
-% grid on
-% xlabel('x (m)')
-% ylabel('Torsion Moment (N*m)')
-
-
-% B.2) Study of convergence
-
-% stycnv = studyOfCnvg(data);
-% stycnv.compute();
-
-
-
-%% C) Von Mises Criterion
-
-% [max_vms,mcp_sect,mcp_beam] = VonMises(data,mD1,xnod,Sel,Mbel,Mtel);
-
 
 
 %% Unit testing
