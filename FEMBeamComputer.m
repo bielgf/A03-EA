@@ -114,6 +114,7 @@ classdef FEMBeamComputer < handle
             bm.dofsConnec     = obj.connec.dofsConnec;
             bm.materialConnec = obj.connec.materialConnec;
             bm.fixedNodes     = obj.connec.fixedNodes;
+            
             bm.externalForce  = obj.externalForce;
             bm.beamProp       = obj.beamProp;
             beam              = BeamSolver(bm);
