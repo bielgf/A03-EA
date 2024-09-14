@@ -10,6 +10,6 @@ function [u,r] = solveSystem(ndof,K,f,up,vp)
     solver = Solver.create(LHS,RHS,method);
     solver.compute();
 
-    u(vf) = solver.x;                               % free DOFs
-    r = K(vp,:)*u-f(vp);                            % reaction loads
+    u(vf) = solver.x;
+    r = K(vp,:)*u-f(vp);
 end

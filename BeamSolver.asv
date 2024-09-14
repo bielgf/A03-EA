@@ -45,17 +45,12 @@ classdef BeamSolver < handle
 
             bc = applyBoundaryConditionsClass(s);
             bc.computeBC();
-            s.up = bc.up;
-            s.vp = bc.vp;
+            up = bc.up;
+            vp = bc.vp;
 
             pL = pointLoadsClass(s);
             pL.computePointLoads();
-            s.F = pL.F;
-
-            sS = SolveSystemClass(s);
-            sS.computeSystem();
-            u = sS.u;
-            r = sS.r;
+            F = pL.F;
 
 
 
@@ -65,7 +60,7 @@ classdef BeamSolver < handle
 %             [K,F] = assemblyFunction(obj.totalDOFs,obj.numElements,obj.numNodesElem,obj.numDOFsNode,obj.dofsConnec,Kel,fel); % passar a class
 %             [up,vp] = applyBC(obj.numDOFsNode,obj.fixedNodes); % passar a class
 %             [F] = pointLoads(obj.numDOFsNode,F,obj.externalForce); % passar a class
-%             [u,r] = solveSystem(obj.totalDOFs,K,F,up,vp);
+            [u,r] = solveSystem(obj.totalDOFs,K,F,up,vp);
 
             K = s.K;
             F = s.F;
