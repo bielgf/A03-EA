@@ -100,9 +100,9 @@ classdef FEMBeamComputer < handle
         function computeBeamSolver(obj)
             bm.beamParams    = obj.beamParams;
             bm.connec        = obj.connec;
-            bm.externalForce  = obj.externalForce;
-            bm.beamProp       = obj.beamProp;
-            beam              = BeamSolver(bm);
+            bm.externalForce = obj.externalForce;
+            bm.beamProp      = obj.beamProp;
+            beam             = BeamSolver(bm);
             [obj.K,obj.F,obj.u,obj.r] = beam.compute();
         end
 
