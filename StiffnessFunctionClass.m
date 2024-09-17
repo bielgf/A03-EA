@@ -6,18 +6,14 @@ classdef StiffnessFunctionClass < handle
         beamProp
     end
 
-    properties (Access = public)
-        Kel
-    end
-
     methods (Access = public)
         
         function obj = StiffnessFunctionClass(cParams)
             obj.init(cParams);
         end
 
-        function computeStiffnessMatrix(obj)
-            obj.compute();
+        function Kel = computeStiffnessMatrix(obj)
+            Kel = obj.compute();
         end
 
     end
@@ -30,7 +26,7 @@ classdef StiffnessFunctionClass < handle
             obj.beamProp   = cParams.beamPr;
         end
 
-        function compute(obj)
+        function Kel = compute(obj)
             nne = obj.beamParams.numNodesElem;
             ni  = obj.beamParams.numDOFsNode;
             nel = obj.beamParams.numElements;
@@ -39,7 +35,7 @@ classdef StiffnessFunctionClass < handle
             mC  = obj.connec.materialConnec;
             bP  = obj.beamProp;
 
-            obj.Kel = zeros(nne*ni,nne*ni,nel);
+            Kel = zeros(nne*ni,nne*ni,nel);
             for ei = 1:nel
                 b.le = abs(x(nC(ei,2),1) - x(nC(ei,1),1));
             
@@ -50,14 +46,14 @@ classdef StiffnessFunctionClass < handle
         
                 BendMatrix = BendingStiffMatrixAssembly(b);
                 BendMatrix.assembleMatrix();
-                Kb = BendMatrix.Kb;
+                Kb = BendMatrix.Kb; % private function
             
                 TorMatrix = TorsionStiffMatrixAssembly(b);
                 TorMatrix.assembleMatrix();
-                Kt = TorMatrix.Kt;
+                Kt = TorMatrix.Kt; % private function
             
                 K = Kb + Kt;
-                obj.Kel(:,:,ei) = K;
+                Kel(:,:,ei) = K;
             end
         end
 

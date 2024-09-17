@@ -40,6 +40,7 @@ classdef ExternalForceAssembly < handle
             chiP = obj.geomParams.chiP;
             xSc  = obj.geomParams.xShearCenter;
 
+            % Fer [F11,F21,F13,F23] = ... private function
             F11 = find(xG == xE);
             F21 = F11;
             F13 = -eM*g;

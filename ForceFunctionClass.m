@@ -37,7 +37,7 @@ classdef ForceFunctionClass < handle
             me  = obj.beamParams.momentElem;
             Tn  = obj.connec.nodalConnec;
 
-            obj.fel = zeros(nne*ni,nel);
+            fElem = zeros(nne*ni,nel);
             for ei = 1:nel
                 le = abs(x(Tn(ei,2),1) - x(Tn(ei,1),1));
             
@@ -46,8 +46,9 @@ classdef ForceFunctionClass < handle
                 ft = me(1,ei)*le*[0  0  1/2   0   0   1/2]';
             
                 f = fb + ft;
-                obj.fel(:,ei) = f;
+                fElem(:,ei) = f;
             end
+            obj.fel = fElem;
         end
 
     end

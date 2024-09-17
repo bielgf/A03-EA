@@ -19,9 +19,8 @@ classdef BeamSolver < handle
             s.beamPr = obj.beamProp;
             s.extF   = obj.externalForce;
 
-            sF = StiffnessFunctionClass(s);
-            sF.computeStiffnessMatrix();
-            s.Kel = sF.Kel;
+            Kel = obj.computeElementalStiffnessMatrix();
+            s.Kel = Kel;
 
             fF = ForceFunctionClass(s);
             fF.computeForceVector();
@@ -32,7 +31,7 @@ classdef BeamSolver < handle
             s.K = aF.K;
             s.F = aF.F;
 
-            bc = applyBoundaryConditionsClass(s);
+            bc = applyBoundaryConditionsClass(s); % BoundaryConditionsApplier
             bc.computeBC();
             s.up = bc.up;
             s.vp = bc.vp;
@@ -59,6 +58,14 @@ classdef BeamSolver < handle
             obj.connec        = cParams.connec;
             obj.beamProp      = cParams.beamProp;
             obj.externalForce = cParams.externalForce;
+        end
+
+        function Kel = computeElementalStiffnessMatrix(obj)
+            s.beamP  = obj.beamParams;
+            s.con    = obj.connec;
+            s.beamPr = obj.beamProp;
+            K        = StiffnessFunctionClass(s); % ElemenetalStiffnessMatrixComputer
+            Kel      = K.computeStiffnessMatrix();
         end
 
     end

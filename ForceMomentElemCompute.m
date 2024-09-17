@@ -1,9 +1,9 @@
 classdef ForceMomentElemCompute < handle
     
     properties (Access = private)
-        numDOFsNode
-        numElements
-        geoP
+        ndof
+        nelem
+        geoParams
         aeroParams
         lambda
     end
@@ -15,13 +15,13 @@ classdef ForceMomentElemCompute < handle
         end
 
         function [xGlobal,forceElem,momentElem,totalDOFs] = compute(obj)
-            nElem = obj.numElements;
-            geomP = obj.geoP;
+            nElem = obj.nelem;
+            geomP = obj.geoParams;
             aeroP = obj.aeroParams;
             l     = obj.lambda;
             [xGlobal,forceElem,momentElem] = GetForceMomentElement(nElem,aeroP,l,geomP);
-            nnod = size(xGlobal,2);
-            totalDOFs = nnod*obj.numDOFsNode;
+            nnod      = size(xGlobal,2);
+            totalDOFs = nnod*obj.ndof;
         end
 
     end
@@ -29,11 +29,11 @@ classdef ForceMomentElemCompute < handle
     methods (Access = private)
 
         function init(obj,cParams)
-            obj.numDOFsNode  = cParams.numDOFsNode;
-            obj.numElements  = cParams.numElements;
-            obj.geoP         = cParams.geoP;
-            obj.aeroParams   = cParams.aeroParams;
-            obj.lambda       = cParams.lambda;
+            obj.ndof       = cParams.numDOFsNode;
+            obj.nelem      = cParams.numElements;
+            obj.geoParams  = cParams.geoP;
+            obj.aeroParams = cParams.aeroParams;
+            obj.lambda     = cParams.lambda;
         end
 
     end

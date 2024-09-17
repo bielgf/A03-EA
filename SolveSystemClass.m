@@ -1,7 +1,7 @@
 classdef SolveSystemClass < handle
     
     properties (Access = private)
-        beamParams
+        beamParams % -> nDofTotal
         K
         F
         up
@@ -46,15 +46,13 @@ classdef SolveSystemClass < handle
             obj.u = zeros(ndof,1);
             obj.u(vpoint) = upoint;
             LHS = k(vf,vf);
-            RHS = f(vf) - k(vf,vpoint)*obj.u(vpoint);
+            RHS = f(vf) - k(vf,vpoint)*obj.u(vpoint); % private function
 
             method = 'Direct';      % method = Direct or Iterative
-
             solver = Solver.create(LHS,RHS,method);
             solver.compute();
-
             obj.u(vf) = solver.x;
-            obj.r = k(vpoint,:)*obj.u-f(vpoint);
+            obj.r = k(vpoint,:)*obj.u-f(vpoint); % private function
         end
 
     end

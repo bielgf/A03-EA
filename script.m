@@ -1,5 +1,12 @@
 %% A03 Beam structure: Wingbox
 
+% ToDo:
+% - [BeamSolver] Crear funcions privades de forces, assembly... similar a StiffnessFunctionClass
+% - computeForceMomentElem simplificar propietats
+% - Fer [F11,F21,F13,F23] = ... private function
+% - Unir beamParams i beamProp a BeamSolver i dependències
+% - Revisar noms de les classes
+
 %% DATA -------------------------------------------------------------------
 
 data.E = 210*10^(9);                          % Pa

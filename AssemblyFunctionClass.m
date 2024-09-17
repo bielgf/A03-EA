@@ -48,7 +48,7 @@ classdef AssemblyFunctionClass < handle
                 for i = 1:(nne*ni)
                     obj.F(Td(e,i)) = obj.F(Td(e,i)) + fel(i,e);
                 end
-            end 
+            end % private function + cridar class global ext forces
             
             s.Kel  = Kel;
             s.Td   = Td;
@@ -58,7 +58,7 @@ classdef AssemblyFunctionClass < handle
             s.ndof = ndof;
             gsmc = GlobalStiffnessMatrixComputer(s);
             gsmc.compute();
-            obj.K = gsmc.KGlobal;
+            obj.K = gsmc.KGlobal; % private function
         end
 
     end

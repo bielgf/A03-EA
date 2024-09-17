@@ -25,9 +25,9 @@ classdef BendingStiffMatrixAssembly < handle
     methods (Access = private)
         
         function init(obj,cParams)
-            obj.youngM  = cParams.E;
+            obj.youngM    = cParams.E;
             obj.xInertia  = cParams.I;
-            obj.l = cParams.le;
+            obj.l         = cParams.le;
         end
 
         function assemble(obj)
