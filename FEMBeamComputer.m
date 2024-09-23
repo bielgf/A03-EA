@@ -65,17 +65,11 @@ classdef FEMBeamComputer < handle
         end
 
         function computeForceMomentElem(obj)
-            s.geoP.beamWidth    = obj.geomParams.beamWidth;
-            s.geoP.chiP         = obj.geomParams.chiP;
-            s.geoP.aeroCenter   = obj.geomParams.aeroCenter;
-            s.geoP.gravCenter   = obj.geomParams.gravCenter;
-            s.geoP.xShearCenter = obj.geomParams.xShearCenter;
-            s.geoP.wingspan     = obj.geomParams.wingspan;
-            s.geoP.chord        = obj.geomParams.chord;
-            s.aeroParams        = obj.aeroParams;
-            s.lambda            = obj.beamParams.lambda;
-            s.numDOFsNode       = obj.beamParams.numDOFsNode;
-            s.numElements       = obj.beamParams.numElements;
+            s.geoParams   = obj.geomParams;
+            s.aeroParams  = obj.aeroParams;
+            s.lambda      = obj.beamParams.lambda;
+            s.numDOFsNode = obj.beamParams.numDOFsNode;
+            s.numElements = obj.beamParams.numElements;
             forceMomentElem = ForceMomentElemCompute(s);
             [xGlobal,forceElem,momentElem,totalDOFs] = forceMomentElem.compute();
             obj.beamParams.xGlobal    = xGlobal;

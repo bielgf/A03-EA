@@ -1,11 +1,11 @@
 classdef ForceMomentElemCompute < handle
     
     properties (Access = private)
-        ndof
-        nelem
         geoParams
         aeroParams
         lambda
+        ndof
+        nelem
     end
 
     methods (Access = public)
@@ -29,11 +29,11 @@ classdef ForceMomentElemCompute < handle
     methods (Access = private)
 
         function init(obj,cParams)
-            obj.ndof       = cParams.numDOFsNode;
-            obj.nelem      = cParams.numElements;
-            obj.geoParams  = cParams.geoP;
+            obj.geoParams  = cParams.geoParams;
             obj.aeroParams = cParams.aeroParams;
             obj.lambda     = cParams.lambda;
+            obj.ndof       = cParams.numDOFsNode;
+            obj.nelem      = cParams.numElements;
         end
 
     end
