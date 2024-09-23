@@ -1,11 +1,11 @@
 classdef PointLoadsApplier < handle
     
     properties (Access = private)
-        beamParams
+        nDOFsNode
         externalForce
     end
 
-    properties (Access = public)
+    properties
         F
     end
 
@@ -24,13 +24,13 @@ classdef PointLoadsApplier < handle
     methods (Access = private)
 
         function init(obj,cParams)
-            obj.beamParams    = cParams.beamP;
+            obj.nDOFsNode     = cParams.nDofsNode;
             obj.externalForce = cParams.extF;
             obj.F             = cParams.F;
         end
 
         function compute(obj)
-            ni = obj.beamParams.numDOFsNode;
+            ni = obj.nDOFsNode;
             Fc  = obj.externalForce;
 
             for i = 1:size(Fc,1)

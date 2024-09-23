@@ -5,19 +5,14 @@ classdef BoundaryConditionsApplier < handle
         connec
     end
 
-    properties (Access = public)
-        up
-        vp
-    end
-
     methods (Access = public)
 
         function obj = BoundaryConditionsApplier(cParams)
             obj.init(cParams);
         end
 
-        function computeBC(obj)
-            obj.compute();
+        function [up,vp] = computeBC(obj)
+            [up,vp] = obj.compute();
         end
 
     end
@@ -29,16 +24,16 @@ classdef BoundaryConditionsApplier < handle
             obj.connec     = cParams.con;
         end
 
-        function compute(obj)
+        function [up,vp] = compute(obj)
             ni = obj.beamParams.numDOFsNode;
             p  = obj.connec.fixedNodes;
 
             np = size(p,1);
-            obj.vp = zeros(np,1);
-            obj.up = zeros(np,1);
+            vp = zeros(np,1);
+            up = zeros(np,1);
             for i = 1:np
-                obj.vp(i) = nod2dof(ni,p(i,1),p(i,2));
-                obj.up(i) = p(i,3);
+                vp(i) = nod2dof(ni,p(i,1),p(i,2));
+                up(i) = p(i,3);
             end
         end
 

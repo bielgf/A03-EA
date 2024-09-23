@@ -1,22 +1,18 @@
-classdef ElementForceMatrixComputer < handle
+classdef ElementalForceVectorComputer < handle
     
     properties (Access = private)
         beamParams
         connec
     end
 
-    properties (Access = public)
-        fel
-    end
-
     methods (Access = public)
 
-        function obj = ElementForceMatrixComputer(cParams)
+        function obj = ElementalForceVectorComputer(cParams)
             obj.init(cParams);
         end
 
-        function computeForceVector(obj)
-            obj.compute();
+        function fel = computeForceVector(obj)
+            fel = obj.compute();
         end
 
     end
@@ -28,7 +24,7 @@ classdef ElementForceMatrixComputer < handle
             obj.connec     = cParams.con;
         end
 
-        function compute(obj)
+        function fel = compute(obj)
             nne = obj.beamParams.numNodesElem;
             ni  = obj.beamParams.numDOFsNode;
             nel = obj.beamParams.numElements;
@@ -48,7 +44,7 @@ classdef ElementForceMatrixComputer < handle
                 f = fb + ft;
                 fElem(:,ei) = f;
             end
-            obj.fel = fElem;
+            fel = fElem;
         end
 
     end

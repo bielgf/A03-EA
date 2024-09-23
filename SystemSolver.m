@@ -1,16 +1,11 @@
 classdef SystemSolver < handle
     
     properties (Access = private)
-        beamParams % -> nDofTotal
+        nDOFTotal
         K
         F
         up
         vp
-    end
-
-    properties (Access = public)
-        u
-        r
     end
 
     methods (Access = public)
@@ -19,40 +14,40 @@ classdef SystemSolver < handle
             obj.init(cParams);
         end
 
-        function computeSystem(obj)
-            obj.compute();
+        function [u,r] = computeSystem(obj)
+            [u,r] = obj.compute();
         end
 
     end
 
-    methods (Access = public)
+    methods (Access = private)
 
         function init(obj,cParams)
-            obj.beamParams = cParams.beamP;
+            obj.nDOFTotal  = cParams.nDofTotal;
             obj.K          = cParams.K;
             obj.F          = cParams.F;
             obj.up         = cParams.up;
             obj.vp         = cParams.vp;
         end
 
-        function compute(obj)
-            ndof = obj.beamParams.totalDOFs;
+        function [u,r] = compute(obj)
+            ndof = obj.nDOFTotal;
             k    = obj.K;
             f    = obj.F;
             upoint   = obj.up;
             vpoint   = obj.vp;
 
             vf = setdiff((1:ndof)',vpoint);
-            obj.u = zeros(ndof,1);
-            obj.u(vpoint) = upoint;
+            u = zeros(ndof,1);
+            u(vpoint) = upoint;
             LHS = k(vf,vf);
-            RHS = f(vf) - k(vf,vpoint)*obj.u(vpoint); % private function
+            RHS = f(vf) - k(vf,vpoint)*u(vpoint);
 
-            method = 'Direct';      % method = Direct or Iterative
+            method = 'Direct';                      % method = Direct or Iterative
             solver = Solver.create(LHS,RHS,method);
             solver.compute();
-            obj.u(vf) = solver.x;
-            obj.r = k(vpoint,:)*obj.u-f(vpoint); % private function
+            u(vf) = solver.x;
+            r = k(vpoint,:)*u-f(vpoint);
         end
 
     end

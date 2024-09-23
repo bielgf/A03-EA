@@ -7,19 +7,14 @@ classdef Assembler < handle
         fElem
     end
 
-    properties (Access = public)
-        K
-        F
-    end
-
     methods (Access = public)
         
         function obj = Assembler(cParams)
             obj.init(cParams);
         end
 
-        function computeAssembly(obj)
-            obj.compute;
+        function [K,F] = computeAssembly(obj)
+            [K,F] = obj.compute;
         end
 
     end
@@ -33,32 +28,19 @@ classdef Assembler < handle
             obj.fElem      = cParams.fel;
         end
 
-        function compute(obj)
-            ndof = obj.beamParams.totalDOFs;
-            nel  = obj.beamParams.numElements;
-            nne  = obj.beamParams.numNodesElem;
-            ni   = obj.beamParams.numDOFsNode;
-            Td   = obj.connec.dofsConnec;
-            Kel  = obj.KElem;
-            fel  = obj.fElem;
+        function [K,F] = compute(obj)
+            s.beamP = obj.beamParams;
+            s.con   = obj.connec;
+            Kel     = obj.KElem;
+            fel     = obj.fElem;
 
-            obj.F = zeros(ndof,1);
+            gsmc = GlobalStiffnessMatrixComputer(s,Kel);
+            gsmc.computeGlobalStiffnessMatrix();
+            K = gsmc.K;
 
-            for e = 1:nel
-                for i = 1:(nne*ni)
-                    obj.F(Td(e,i)) = obj.F(Td(e,i)) + fel(i,e);
-                end
-            end % private function + cridar class global ext forces
-            
-            s.Kel  = Kel;
-            s.Td   = Td;
-            s.nel  = nel;
-            s.nne  = nne;
-            s.ni   = ni;
-            s.ndof = ndof;
-            gsmc = GlobalStiffnessMatrixComputer(s);
-            gsmc.compute();
-            obj.K = gsmc.KGlobal; % private function
+            gefc = GlobalExternalForceComputer(s,fel);
+            gefc.computeExternalForces();
+            F = gefc.F;
         end
 
     end

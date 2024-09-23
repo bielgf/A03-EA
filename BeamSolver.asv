@@ -20,6 +20,14 @@ classdef BeamSolver < handle
             [up,vp] = obj.computeBoundaryConditions();
             F       = obj.computePointLoads(F);
             [u,r]   = obj.computeSystem(K,F,up,vp);
+
+            sS = SystemSolver(s);
+            sS.computeSystem();
+            u = sS.u;
+            r = sS.r;
+
+            K = s.K;
+            F = s.F;
         end
 
     end
@@ -73,14 +81,8 @@ classdef BeamSolver < handle
             F = pL.F;
         end
 
-        function [u,r] = computeSystem(obj,K,F,up,vp)
-            s.nDofTotal = obj.beamParams.totalDOFs;
-            s.K         = K;
-            s.F         = F;
-            s.up        = up;
-            s.vp        = vp;
-            solv  = SystemSolver(s);
-            [u,r] = solv.computeSystem();
+        function [u,r] = computeSystem(K,F,up,vp)
+            s.nDofTotal = obj.beamParams.totalDOFS
         end
 
     end
