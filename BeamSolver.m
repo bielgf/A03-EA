@@ -31,7 +31,7 @@ classdef BeamSolver < handle
             s.K = aF.K;
             s.F = aF.F;
 
-            bc = applyBoundaryConditionsClass(s); % BoundaryConditionsApplier
+            bc = BoundaryConditionsApplier(s);
             bc.computeBC();
             s.up = bc.up;
             s.vp = bc.vp;

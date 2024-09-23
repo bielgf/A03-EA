@@ -1,4 +1,4 @@
-classdef applyBoundaryConditionsClass < handle
+classdef BoundaryConditionsApplier < handle
     
     properties (Access = private)
         beamParams
@@ -12,7 +12,7 @@ classdef applyBoundaryConditionsClass < handle
 
     methods (Access = public)
 
-        function obj = applyBoundaryConditionsClass(cParams)
+        function obj = BoundaryConditionsApplier(cParams)
             obj.init(cParams);
         end
 
