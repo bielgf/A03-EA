@@ -22,11 +22,11 @@ classdef BeamSolver < handle
             Kel = obj.computeElementalStiffnessMatrix();
             s.Kel = Kel;
 
-            fF = ForceFunctionClass(s);
+            fF = ElementForceMatrixComputer(s);
             fF.computeForceVector();
             s.fel = fF.fel;
 
-            aF = AssemblyFunctionClass(s);
+            aF = Assembler(s);
             aF.computeAssembly();
             s.K = aF.K;
             s.F = aF.F;
@@ -36,11 +36,11 @@ classdef BeamSolver < handle
             s.up = bc.up;
             s.vp = bc.vp;
 
-            pL = pointLoadsClass(s);
+            pL = PointLoadsApplier(s);
             pL.computePointLoads();
             s.F = pL.F;
 
-            sS = SolveSystemClass(s);
+            sS = SystemSolver(s);
             sS.computeSystem();
             u = sS.u;
             r = sS.r;
@@ -64,7 +64,7 @@ classdef BeamSolver < handle
             s.beamP  = obj.beamParams;
             s.con    = obj.connec;
             s.beamPr = obj.beamProp;
-            K        = StiffnessFunctionClass(s); % ElemenetalStiffnessMatrixComputer
+            K        = ElemenetalStiffnessMatrixComputer(s);
             Kel      = K.computeStiffnessMatrix();
         end
 

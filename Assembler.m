@@ -1,4 +1,4 @@
-classdef AssemblyFunctionClass < handle
+classdef Assembler < handle
 
     properties (Access = private)
         beamParams
@@ -14,7 +14,7 @@ classdef AssemblyFunctionClass < handle
 
     methods (Access = public)
         
-        function obj = AssemblyFunctionClass(cParams)
+        function obj = Assembler(cParams)
             obj.init(cParams);
         end
 

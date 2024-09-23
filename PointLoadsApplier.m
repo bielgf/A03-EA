@@ -1,4 +1,4 @@
-classdef pointLoadsClass < handle
+classdef PointLoadsApplier < handle
     
     properties (Access = private)
         beamParams
@@ -11,7 +11,7 @@ classdef pointLoadsClass < handle
 
     methods (Access = public)
         
-        function obj = pointLoadsClass(cParams)
+        function obj = PointLoadsApplier(cParams)
             obj.init(cParams);
         end
 

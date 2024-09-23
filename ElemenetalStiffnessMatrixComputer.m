@@ -1,4 +1,4 @@
-classdef StiffnessFunctionClass < handle
+classdef ElemenetalStiffnessMatrixComputer < handle
     
     properties (Access = private)
         beamParams
@@ -8,7 +8,7 @@ classdef StiffnessFunctionClass < handle
 
     methods (Access = public)
         
-        function obj = StiffnessFunctionClass(cParams)
+        function obj = ElemenetalStiffnessMatrixComputer(cParams)
             obj.init(cParams);
         end
 

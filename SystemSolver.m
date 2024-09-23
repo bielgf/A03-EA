@@ -1,4 +1,4 @@
-classdef SolveSystemClass < handle
+classdef SystemSolver < handle
     
     properties (Access = private)
         beamParams % -> nDofTotal
@@ -15,7 +15,7 @@ classdef SolveSystemClass < handle
 
     methods (Access = public)
 
-        function obj = SolveSystemClass(cParams)
+        function obj = SystemSolver(cParams)
             obj.init(cParams);
         end
 
