@@ -3,7 +3,6 @@ classdef ElemenetalStiffnessMatrixComputer < handle
     properties (Access = private)
         beamParams
         connec
-        beamProp
     end
 
     methods (Access = public)
@@ -23,7 +22,6 @@ classdef ElemenetalStiffnessMatrixComputer < handle
         function init(obj,cParams)
             obj.beamParams = cParams.beamP;
             obj.connec     = cParams.con;
-            obj.beamProp   = cParams.beamPr;
         end
 
         function Kel = compute(obj)
@@ -31,9 +29,9 @@ classdef ElemenetalStiffnessMatrixComputer < handle
             ni  = obj.beamParams.numDOFsNode;
             nel = obj.beamParams.numElements;
             x   = obj.beamParams.xGlobal';
+            bP  = obj.beamParams.Prop;
             nC  = obj.connec.nodalConnec;
             mC  = obj.connec.materialConnec;
-            bP  = obj.beamProp;
 
             Kel = zeros(nne*ni,nne*ni,nel);
             for ei = 1:nel

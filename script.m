@@ -1,9 +1,5 @@
 %% A03 Beam structure: Wingbox
 
-% ToDo:
-% - Fer [F11,F21,F13,F23] = ... private function
-% - Unir beamParams i beamProp a BeamSolver i dependències
-
 %% DATA -------------------------------------------------------------------
 
 data.E = 210*10^(9);                          % Pa

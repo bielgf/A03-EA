@@ -31,6 +31,11 @@ classdef ExternalForceAssembly < handle
         end
 
         function assemblyMatrix(obj)
+            [F11,F21,F13,F23] = obj.MatrixComponents();
+            obj.externalForce = [F11, 1, F13 ; F21, 3, F23];
+        end
+
+        function [F11,F21,F13,F23] = MatrixComponents(obj)
             xG   = obj.beamParams.xGlobal;
             xE   = obj.beamParams.xEngine;
             zE   = obj.beamParams.zEngine;
@@ -39,14 +44,11 @@ classdef ExternalForceAssembly < handle
             bw   = obj.geomParams.beamWidth;
             chiP = obj.geomParams.chiP;
             xSc  = obj.geomParams.xShearCenter;
-
-            % Fer [F11,F21,F13,F23] = ... private function
+            
             F11 = find(xG == xE);
             F21 = F11;
             F13 = -eM*g;
             F23 = -eM*g*(((bw + chiP) - xSc) - zE);
-            
-            obj.externalForce = [F11, 1, F13 ; F21, 3, F23];
         end
 
     end

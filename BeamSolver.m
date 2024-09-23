@@ -3,7 +3,6 @@ classdef BeamSolver < handle
     properties (Access = private)
         beamParams
         connec
-        beamProp
         externalForce
     end
 
@@ -29,14 +28,12 @@ classdef BeamSolver < handle
         function init(obj,cParams)
             obj.beamParams    = cParams.beamParams;
             obj.connec        = cParams.connec;
-            obj.beamProp      = cParams.beamProp;
             obj.externalForce = cParams.externalForce;
         end
 
         function Kel = computeElementalStiffnessMatrix(obj)
             s.beamP  = obj.beamParams;
             s.con    = obj.connec;
-            s.beamPr = obj.beamProp;
             K        = ElemenetalStiffnessMatrixComputer(s);
             Kel      = K.computeStiffnessMatrix();
         end

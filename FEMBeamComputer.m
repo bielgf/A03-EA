@@ -56,14 +56,6 @@ classdef FEMBeamComputer < handle
             obj.geomParams.J             = J;
         end
 
-        function beamProp = computeBeamProperties(obj)
-            E   = obj.geomParams.E;
-            G   = obj.geomParams.G;
-            Ixx = obj.geomParams.xSecInertia;
-            J   = obj.geomParams.J;
-            beamProp = [E   G   Ixx    J];
-        end
-
         function computeForceMomentElem(obj)
             s.geoParams   = obj.geomParams;
             s.aeroParams  = obj.aeroParams;
@@ -88,12 +80,20 @@ classdef FEMBeamComputer < handle
         end
 
         function computeBeamSolver(obj)
-            s.beamParams    = obj.beamParams;
-            s.connec        = obj.connec;
-            s.externalForce = obj.computeExternalForce();
-            s.beamProp      = obj.computeBeamProperties;
+            s.beamParams      = obj.beamParams;
+            s.connec          = obj.connec;
+            s.externalForce   = obj.computeExternalForce();
+            s.beamParams.Prop = obj.computeBeamProperties;
             beam            = BeamSolver(s);
             [obj.K,obj.F,obj.u,obj.r] = beam.compute();
+        end
+
+        function beamProp = computeBeamProperties(obj)
+            E   = obj.geomParams.E;
+            G   = obj.geomParams.G;
+            Ixx = obj.geomParams.xSecInertia;
+            J   = obj.geomParams.J;
+            beamProp = [E   G   Ixx    J];
         end
 
     end
