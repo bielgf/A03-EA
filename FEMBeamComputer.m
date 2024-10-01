@@ -23,7 +23,6 @@ classdef FEMBeamComputer < handle
         function compute(obj)
             obj.computeGeoDiscret();
             obj.computeSectionSolver();
-            obj.computeForceMomentElem();
             obj.computeBeamSolver();
         end
 
@@ -56,13 +55,23 @@ classdef FEMBeamComputer < handle
             obj.geomParams.J             = J;
         end
 
-        function computeForceMomentElem(obj)
+        function computeBeamSolver(obj)
+            obj.computeBeamElements();
+            s.beamParams      = obj.beamParams;
+            s.connec          = obj.connec;
+            s.externalForce   = obj.computeExternalForcesMatrix();
+            s.beamParams.Prop = obj.computeBeamProperties;
+            beam              = BeamSolver(s);
+            [obj.K,obj.F,obj.u,obj.r] = beam.compute();
+        end
+
+        function computeBeamElements(obj)
             s.geoParams   = obj.geomParams;
             s.aeroParams  = obj.aeroParams;
             s.lambda      = obj.beamParams.lambda;
             s.numDOFsNode = obj.beamParams.numDOFsNode;
             s.numElements = obj.beamParams.numElements;
-            forceMomentElem = ForceMomentElemCompute(s);
+            forceMomentElem = BeamElemCompute(s);
             [xGlobal,forceElem,momentElem,totalDOFs] = forceMomentElem.compute();
             obj.beamParams.xGlobal    = xGlobal;
             obj.beamParams.forceElem  = forceElem;
@@ -70,22 +79,13 @@ classdef FEMBeamComputer < handle
             obj.beamParams.totalDOFs  = totalDOFs;
         end
 
-        function extF = computeExternalForce(obj)
+        function extF = computeExternalForcesMatrix(obj)
             s.geomParams = obj.geomParams;
             s.aeroParams = obj.aeroParams;
             s.beamParams = obj.beamParams;
             efAssembly   = ExternalForceAssembly(s);
             efAssembly.assembly();
             extF = efAssembly.externalForce;
-        end
-
-        function computeBeamSolver(obj)
-            s.beamParams      = obj.beamParams;
-            s.connec          = obj.connec;
-            s.externalForce   = obj.computeExternalForce();
-            s.beamParams.Prop = obj.computeBeamProperties;
-            beam              = BeamSolver(s);
-            [obj.K,obj.F,obj.u,obj.r] = beam.compute();
         end
 
         function beamProp = computeBeamProperties(obj)

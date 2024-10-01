@@ -1,4 +1,4 @@
-classdef ForceMomentElemCompute < handle
+classdef BeamElemCompute < handle
     
     properties (Access = private)
         geoParams
@@ -10,7 +10,7 @@ classdef ForceMomentElemCompute < handle
 
     methods (Access = public)
         
-        function obj = ForceMomentElemCompute(cParams)
+        function obj = BeamElemCompute(cParams)
             obj.init(cParams);
         end
 
