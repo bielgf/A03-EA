@@ -59,7 +59,7 @@ classdef FEMBeamComputer < handle
             obj.computeBeamElements();
             s.beamParams      = obj.beamParams;
             s.connec          = obj.connec;
-            s.externalForce   = obj.computeExternalForcesMatrix();
+            s.externalForce   = obj.computeBeamExternalForcesMatrix();
             s.beamParams.Prop = obj.computeBeamProperties;
             beam              = BeamSolver(s);
             [obj.K,obj.F,obj.u,obj.r] = beam.compute();
@@ -79,11 +79,11 @@ classdef FEMBeamComputer < handle
             obj.beamParams.totalDOFs  = totalDOFs;
         end
 
-        function extF = computeExternalForcesMatrix(obj)
+        function extF = computeBeamExternalForcesMatrix(obj)
             s.geomParams = obj.geomParams;
             s.aeroParams = obj.aeroParams;
             s.beamParams = obj.beamParams;
-            efAssembly   = ExternalForceAssembly(s);
+            efAssembly   = BeamExternalForcesAssembly(s);
             efAssembly.assembly();
             extF = efAssembly.externalForce;
         end

@@ -1,4 +1,4 @@
-classdef ExternalForceAssembly < handle
+classdef BeamExternalForcesAssembly < handle
     
     properties (Access = private)
         geomParams
@@ -12,7 +12,7 @@ classdef ExternalForceAssembly < handle
 
     methods (Access = public)
         
-        function obj = ExternalForceAssembly(cParams)
+        function obj = BeamExternalForcesAssembly(cParams)
             obj.init(cParams);
         end
 
