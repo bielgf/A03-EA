@@ -15,7 +15,8 @@ classdef BeamSolver < handle
         function [K,F,u,r] = compute(obj)
             Kel     = obj.computeElementalStiffnessMatrix();
             fel     = obj.computeElementalForceVector();
-            [K,F]   = obj.computeGlobalAssembly(Kel,fel);
+            K       = obj.computeGlobalStiffnessMatrix(Kel);
+            F       = obj.computeGlobalExternalForce(fel);
             [up,vp] = obj.computeBoundaryConditions();
             F       = obj.computePointLoads(F);
             [u,r]   = obj.computeSystem(K,F,up,vp);
@@ -45,13 +46,24 @@ classdef BeamSolver < handle
             fel     = f.computeForceVector();
         end
 
-        function [K,F] = computeGlobalAssembly(obj,Kel,fel)
+        function K = computeGlobalStiffnessMatrix(obj,Kel)
             s.beamP = obj.beamParams;
             s.con   = obj.connec;
             s.Kel   = Kel;
+            
+            gsmc = GlobalStiffnessMatrixComputer(s,Kel);
+            gsmc.computeGlobalStiffnessMatrix();
+            K = gsmc.K;
+        end
+
+        function F = computeGlobalExternalForce(obj,fel)
+            s.beamP = obj.beamParams;
+            s.con   = obj.connec;
             s.fel   = fel;
-            globAssembly = Assembler(s);
-            [K,F]   = globAssembly.computeAssembly();
+            
+            gefc = GlobalExternalForceComputer(s,fel);
+            gefc.computeExternalForces();
+            F = gefc.F;
         end
 
         function [up,vp] = computeBoundaryConditions(obj)
